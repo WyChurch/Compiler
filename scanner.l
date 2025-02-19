@@ -49,7 +49,7 @@ yylineno = 1;
 
  /* Keywords */;
 	//TODO: Support all keywords in mC
-	//All keywords defined
+	/* Define keyword rules */
 	if       { updateCol(); return IF; }
 	else     { updateCol(); return ELSE; }
 	while    { updateCol(); return WHILE; }
