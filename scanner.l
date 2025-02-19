@@ -50,15 +50,34 @@ yylineno = 1;
  /* Keywords */;
 	//TODO: Support all keywords in mC
 	/* Define keyword rules */
-	if       { updateCol(); return KWD_IF; }
-	else     { updateCol(); return KWD_ELSE; }
-	while    { updateCol(); return KWD_WHILE; }
-	return   { updateCol(); return KWD_RETURN; }
+	if       { updateCol(); return IF; }
+	else     { updateCol(); return ELSE; }
+	while    { updateCol(); return WHILE; }
+	do       { updateCol(); return DO; }
+	for      { updateCol(); return FOR; }
+	break    { updateCol(); return BREAK; }
+	continue { updateCol(); return CONTINUE; }
+	switch   { updateCol(); return SWITCH; }
+	case     { updateCol(); return CASE; }
+	default  { updateCol(); return DEFAULT; }
+	return   { updateCol(); return RETURN; }
+	goto     { updateCol(); return GOTO; }
 
-	int      { updateCol(); return KWD_INT; }
-	string	 { updateCol(); return KWD_STRING; }
-	char     { updateCol(); return KWD_CHAR; }
-	void     { updateCol(); return KWD_VOID; }
+	int      { updateCol(); return INT; }
+	char     { updateCol(); return CHAR; }
+	float    { updateCol(); return FLOAT; }
+	double   { updateCol(); return DOUBLE; }
+	void     { updateCol(); return VOID; }
+	short    { updateCol(); return SHORT; }
+	long     { updateCol(); return LONG; }
+	unsigned { updateCol(); return UNSIGNED; }
+	signed   { updateCol(); return SIGNED; }
+
+	static   { updateCol(); return STATIC; }
+	typedef  { updateCol(); return TYPEDEF; }
+
+	sizeof   { updateCol(); return SIZEOF; }
+	struct   { updateCol(); return STRUCT; }
 	
  /* Operators */;
 	//TODO: Support all operators in mC
@@ -101,10 +120,14 @@ void updateCol(){
 
 void countLines(){
 	//TODO: Count the number of lines (done)
+
 	scanlineno++;
 }
 
 
 int processString(){
 	// TODO: Process a string literal and return the appropriate microsyntax.
+
+	
+
 }
