@@ -2,7 +2,7 @@
 /* definitions */
 
 %{
-#include<stdio.h>
+#include <stdio.h>
 #include "tokendef.h"
 
 int scancol = 1;
@@ -49,8 +49,41 @@ yylineno = 1;
 
  /* Keywords */;
 	//TODO: Support all keywords in mC
+	/* Define keyword rules */
+	if       { updateCol(); return IF; }
+	else     { updateCol(); return ELSE; }
+	while    { updateCol(); return WHILE; }
+	do       { updateCol(); return DO; }
+	for      { updateCol(); return FOR; }
+	break    { updateCol(); return BREAK; }
+	continue { updateCol(); return CONTINUE; }
+	switch   { updateCol(); return SWITCH; }
+	case     { updateCol(); return CASE; }
+	default  { updateCol(); return DEFAULT; }
+	return   { updateCol(); return RETURN; }
+	goto     { updateCol(); return GOTO; }
+
+	int      { updateCol(); return INT; }
+	char     { updateCol(); return CHAR; }
+	float    { updateCol(); return FLOAT; }
+	double   { updateCol(); return DOUBLE; }
+	void     { updateCol(); return VOID; }
+	short    { updateCol(); return SHORT; }
+	long     { updateCol(); return LONG; }
+	unsigned { updateCol(); return UNSIGNED; }
+	signed   { updateCol(); return SIGNED; }
+
+	static   { updateCol(); return STATIC; }
+	typedef  { updateCol(); return TYPEDEF; }
+
+	sizeof   { updateCol(); return SIZEOF; }
+	struct   { updateCol(); return STRUCT; }
+	
  /* Operators */;
 	//TODO: Support all operators in mC
+	
+
+ /* Delimiter */
 
  /* Identifiers */;
 {identifier}    //TODO
@@ -86,7 +119,8 @@ void updateCol(){
 }
 
 void countLines(){
-	//TODO: Count the number of lines
+	//TODO: Count the number of lines (done)
+	scanlineno++;
 }
 
 
