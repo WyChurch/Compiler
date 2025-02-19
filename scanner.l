@@ -49,7 +49,7 @@ yylineno = 1;
 
  /* Keywords */;
 	//TODO: Support all keywords in mC
-	/* Define keyword rules */
+	//All keywords defined
 	if       { updateCol(); return IF; }
 	else     { updateCol(); return ELSE; }
 	while    { updateCol(); return WHILE; }
@@ -120,10 +120,14 @@ void updateCol(){
 
 void countLines(){
 	//TODO: Count the number of lines (done)
+
 	scanlineno++;
 }
 
 
 int processString(){
 	// TODO: Process a string literal and return the appropriate microsyntax.
+
+	
+
 }
