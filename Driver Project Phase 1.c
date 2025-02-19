@@ -32,71 +32,17 @@ void printToken(int tokenNum) {
   case KWD_WHILE:
     printf("<KEYWORD, while> : (%d:%d)\n", yylineno, yycol);
     break;
-  case KWD_DO:
-    printf("<KEYWORD, do> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_BREAK:
-    printf("<KEYWORD, break> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_CONTINUE:
-    printf("<KEYWORD, continue> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_INT:
-    printf("<KEYWORD, int> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_DOUBLE:
-    printf("<KEYWORD, double> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_FLOUT:
-    printf("<KEYWORD, flout> : (%d:%d)\n", yylineno, yycol);
-    break;
   case KWD_RETURN:
     printf("<KEYWORD, return> : (%d:%d)\n", yylineno, yycol);
     break;
   case KWD_CHAR:
     printf("<KEYWORD, char> : (%d:%d)\n", yylineno, yycol);
     break;
-  case KWD_CASE:
-    printf("<KEYWORD, case> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_SIZEOF:
-    printf("<KEYWORD, sizeof> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_LONG:
-    printf("KEYWORD, long> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_SHORT:
-    printf("<KEYWORD, short> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_TYPEDEF:
-    printf("<KEYWORD, typedef> : (%d,%d)\n", yylineno, yycol);
-    break;
-  case KWD_SWITCH:
-    printf("<KEYWORD, switch> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_UNSIGNED:
-    printf("<KEYWORD, unsigned> : (%d:%d)\n", yylineno, yycol);
-    break;
   case KWD_VOID:
     printf("<KEYWORD, void> : (%d:%d)\n", yylineno, yycol);
     break;
-  case KWD_STATIC:
-    printf("<KEYWORD, static> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_STRUCK:
-    printf("<KEYWORD, struck> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_GOTO:
-    printf("KEYWORD, goto> : (%d:%d)\n", yylineno, yycol);
-    break;
   case KWD_STRING:
     printf("<KEYWORD, string> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_DEFAULT:
-    printf("<KEYWORD, default> : (%d:%d)\n", yylineno, yycol);
-    break;
-  case KWD_SIGNED:
-    printf("<KEYWORD, signed> : (%d:%d)\n", yylineno, yycol);
     break;
   case OPER_ADD:
     printf("<OPERATOR, +> : (%d:%d)\n", yylineno, yycol);
