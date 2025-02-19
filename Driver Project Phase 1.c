@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-extern char* yytext;
+extern char *yytext;
 
 extern int yylineno;
 extern int yycol;
@@ -91,6 +91,12 @@ void printToken(int tokenNum) {
     break;
   case KWD_STRING:
     printf("<KEYWORD, string> : (%d:%d)\n", yylineno, yycol);
+    break;
+  case KWD_DEFAULT:
+    printf("<KEYWORD, default> : (%d:%d)\n", yylineno, yycol);
+    break;
+  case KWD_SIGNED:
+    printf("<KEYWORD, signed> : (%d:%d)\n", yylineno, yycol);
     break;
   case OPER_ADD:
     printf("<OPERATOR, +> : (%d:%d)\n", yylineno, yycol);
