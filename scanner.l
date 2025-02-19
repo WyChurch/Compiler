@@ -3,7 +3,7 @@
 
 %{
 #include<stdio.h>
-#include "TokenDef.h"
+#include "tokendef.h"
 
 int scancol = 1;
 int yycol = 1;
