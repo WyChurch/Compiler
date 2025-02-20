@@ -13,35 +13,35 @@ int scanlineno = 1;
 
 char* yyerror;
 
-void updateCol(); //TODO: Implement this function to keep track of column numbers
-void countLines(); //TODO: Implement this function to keep track of line numbers
-int processString(); //TODO: Implement this function to check for illegal escape sequences in string literals and print out escape sequences correctly.
+void updateCol(); //TODO: Implement this function to keep track of column numbers (done)
+void countLines(); //TODO: Implement this function to keep track of line numbers (done)
+int processString(); //TODO: Implement this function to check for illegal escape sequences in string literals and print out escape sequences correctly. (done)
 %}
 
-newline   		//TODO
-whitespace      //TODO
-integer         //TODO
-character       //TODO
+newline   		\n
+whitespace      [ \t\r\f\v]+
+integer         [1-9][0-9]*|0
+character       \'([^\'\\]|\\.)\'
 
 /* String can contain any characters between the double quotes other than a newline or
 // unescaped doublequotes.
 */
-string       //TODO
+string       	\"([^\"]|\\.)*\"
 
 /* multiline string has \n somewhere in the middle */
-multlnstring //TODO
+multlnstring 	\"([^\"\n]|\\.)*\n([^\"\n]|\\.)*\"
 
 /* If the end quote is found, one of the two regexes above will be matched. Otherwise,
 // the string is unterminated.
 */
-untermstring //TODO
+untermstring 	\"([^\"\n]|\\.)*
 
-comment         //TODO
-multlncomment   //TODO
-untermcomment   //TODO
+comment         "//".*
+multlncomment   "/\*([^*]|\*+[^*/])*\*+/"
+untermcomment   "/\*([^*]|\*+[^*/])*"
 
-identifier      //TODO
-illidentifier   //TODO: regular expression for an illegal identifier
+identifier      [a-zA-Z_][a-zA-Z0-9+]*
+illidentifier   [0-9][a-zA-Z0-9]*
 
 yylineno = 1;
 
@@ -88,26 +88,26 @@ yylineno = 1;
  /* Delimiter */
 
  /* Identifiers */;
-{identifier}    //TODO
-{illidentifier} //TODO
+{identifier}    { updateCol(); return IDENTIFIER; } 	//TODO (done)
+{illidentifier} { updateCol(); yyerror = "Illegal idetifier: Cannot start with a digit"; return ERROR; } 	//TODO (done)
 
  /* Constants */;
-{integer}       //TODO
-{integerlead0}  //TODO: "Integers may not have leading zeros"
-{character}     //TODO
-{string}        {updateCol(); return processString();}
-{untermstring}  {updateCol(); yyerror = "Unterminated string"; return ERROR;}
-{multlnstring}  {updateCol(); countLines(); yyerror = "String spans multiple lines"; return ERROR;} // Catching a multi-line string and generating an error.
+{integer}       { updateCol(); return INT; }
+{integerlead0}  { updateCol(); yyerror = "Integers mayy not have leading zero"; return ERROR; }				//TODO: "Integers may not have leading zeros" (done)
+{character}     { updateCol(); return CHAR; }
+{string}        { updateCol(); return processString(); }
+{untermstring}  { updateCol(); yyerror = "Unterminated string"; return ERROR; }
+{multlnstring}  { updateCol(); countLines(); yyerror = "String spans multiple lines"; return ERROR; } 		// Catching a multi-line string and generating an error.
 
  /* Comments */;
-{comment}       //TODO
-{untermcomment} //TODO
-{multlncomment} //TODO
+{comment}       { updateCol(); return COMMENT }										//TODO (done)
+{untermcomment} { updateCol(); coutLines(); return COMMENT }						//TODO (done)
+{multlncomment} { updateCol(); yyerrror = "Unterminated comment"; return ERROR; }	//TODO (done)
 
  /* Other */;
-{newline}		{ scanlineno++; yycol = 1; updateCol();}       	//TODO (done), this resets the column count when it hit a newline or \n
+{newline}		{ scanlineno++; yycol = 1; updateCol(); }       	//TODO (done), this resets the column count when it hit a newline or \n
 {whitespace}    { updateCol(); }								//TODO (done) Ignores whitspace
-.               {return ILLEGAL_TOK;}
+.               { return ILLEGAL_TOK; }
 
 %%
 
@@ -126,12 +126,12 @@ void countLines(){
 	scanlineno++;
 }
 
-
-int processString(const char* str){
-	// TODO: Process a string literal and return the appropriate microsyntax.
+/* Process String Literal (Uses yytext Directly) */
+int processString(){
+	// TODO: Process a string literal and return the appropriate microsyntax. (done)
 
 	char processedStr[1024];			//Buffer for processed string
-	int i =0, j = 0;
+	int i = 0, j = 0;
 
 	while(str[i] != '\0') {
 
@@ -141,16 +141,16 @@ int processString(const char* str){
 			switch(str[i]) {
 
 				case 'n': 
-					processedStr[j++] = '\n';
+					processedStr[j++] = '\n';	// Checks for newline
 					break;
 				case 't':
-					processedStr[j++] = '\t';
+					processedStr[j++] = '\t';	// Checks for tabs
 					break;
 				case '\\':
 					processedStr[j++] = '\\';
 					break;
 				case '"':
-					processedStr[j++] = '"';
+					processedStr[j++] = '"';	
 					break;
 				default;
 					yyerror = "illegal escape sequence";

@@ -1,5 +1,4 @@
 #include "tokendef.h"
-#include "scanner.l"
 #include <stdio.h>
 #include <stdbool.h>
 
