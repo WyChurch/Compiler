@@ -111,6 +111,14 @@ yylineno = 1;
 	";"		{ updateCol(); return SEMICLN; }
 
  /* Delimiter */
+	"["		{ updateCol(); return LSQ_BRKT; }
+	"]"		{ updateCol(); return RSQ_BRKT; }
+	"{"		{ updateCol(); return LCRLY_BRKT; }
+	"}"		{ updateCol(); return RCRLY_BRKT; }
+	"("		{ updateCol(); return LPAREN; }
+	")"		{ updateCol(); return RPAREN; }
+	","		{ updateCol(); return COMMA; }
+	";"		{ updateCol(); return SEMICLN; }
 
  /* Identifiers */;
 {identifier}    { updateCol(); return IDENTIFIER; } 	//TODO (done)
