@@ -1,6 +1,8 @@
 #include "tokendef.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
+
 
 extern char *yytext;
 
@@ -33,6 +35,9 @@ void printToken(int tokenNum) {
     break;
   case KWD_DO:
     printf("<KEYWORD, do> : (%d:%d)\n", yylineno, yycol);
+    break;
+  case KWD_FOR:
+    printf("<KEYWORD, for> : (%d:%d)\n", yylineno, yycol);
     break;
   case KWD_BREAK:
     printf("<KEYWORD, break> : (%d:%d)\n", yylineno, yycol);
@@ -82,7 +87,7 @@ void printToken(int tokenNum) {
   case KWD_STATIC:
     printf("<KEYWORD, static> : (%d:%d)\n", yylineno, yycol);
     break;
-  case KWD_STRUCK:
+  case KWD_STRUCT:
     printf("<KEYWORD, struck> : (%d:%d)\n", yylineno, yycol);
     break;
   case KWD_GOTO:
