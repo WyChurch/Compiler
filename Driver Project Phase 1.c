@@ -100,11 +100,11 @@ void printToken(int tokenNum) {
   case OPER_ADD:
     printf("<OPERATOR, +> : (%d:%d)\n", yylineno, yycol);
     break;
-  case OPER_MUL:
-    printf("<OPERATOR, *> : (%d:%d)\n", yylineno, yycol);
-    break;
   case OPER_SUB:
     printf("<OPERATOR, -> : (%d:%d)\n", yylineno, yycol);
+    break;
+  case OPER_MUL:
+    printf("<OPERATOR, *> : (%d:%d)\n", yylineno, yycol);
     break;
   case OPER_DIV:
     printf("<OPERATOR, /> : (%d:%d)\n", yylineno, yycol);
@@ -112,14 +112,14 @@ void printToken(int tokenNum) {
   case OPER_LT:
     printf("<OPERATOR, <> : (%d:%d)\n", yylineno, yycol);
     break;
-  case OPER_LTE:
-    printf("<OPERATOR, <=> : (%d:%d)\n", yylineno, yycol);
-    break;
   case OPER_GT:
     printf("<OPERATOR, >> : (%d:%d)\n", yylineno, yycol);
     break;
   case OPER_GTE:
     printf("<OPERATOR, >=> : (%d:%d)\n", yylineno, yycol);
+    break;
+  case OPER_LTE:
+    printf("<OPERATOR, <=> : (%d:%d)\n", yylineno, yycol);
     break;
   case OPER_EQ:
     printf("<OPERATOR, ==> : (%d:%d)\n", yylineno, yycol);
