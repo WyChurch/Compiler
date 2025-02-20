@@ -52,34 +52,34 @@ yylineno = 1;
  /* Keywords */;
 	//TODO: Support all keywords in mC
 	/* Define keyword rules */
-	if       { updateCol(); return if; }
-	else     { updateCol(); return else; }
-	while    { updateCol(); return while; }
-	do       { updateCol(); return do; }
-	for      { updateCol(); return for; }
-	break    { updateCol(); return break; }
-	continue { updateCol(); return continue; }
-	switch   { updateCol(); return switch; }
-	case     { updateCol(); return case; }
-	default  { updateCol(); return default; }
-	return   { updateCol(); return return; }
-	goto     { updateCol(); return goto; }
+	if       { updateCol(); return KWD_IF; }
+	else     { updateCol(); return KWD_ELSE; }
+	while    { updateCol(); return KWD_WHILE; }
+	do       { updateCol(); return KWD_DO; }
+	for      { updateCol(); return KWD_FOR; }
+	break    { updateCol(); return KWD_BREAK; }
+	continue { updateCol(); return KWD_CONTINUE; }
+	switch   { updateCol(); return KWD_SWITCH; }
+	case     { updateCol(); return KWD_CASE; }
+	default  { updateCol(); return KWD_DEFAULT; }
+	return   { updateCol(); return KWD_RETURN; }
+	goto     { updateCol(); return KWD_GOTO; }
 
-	int      { updateCol(); return int; }
-	char     { updateCol(); return char; }
-	float    { updateCol(); return float; }
-	double   { updateCol(); return double; }
-	void     { updateCol(); return void; }
-	short    { updateCol(); return short; }
-	long     { updateCol(); return long; }
-	unsigned { updateCol(); return unsigned; }
-	signed   { updateCol(); return signed; }
+	int      { updateCol(); return KWD_INT; }
+	char     { updateCol(); return KWD_CHAR; }
+	float    { updateCol(); return KWD_FLOUT; }
+	double   { updateCol(); return KWD_DOUBLE; }
+	void     { updateCol(); return KWD_VOID; }
+	short    { updateCol(); return KWD_SHORT; }
+	long     { updateCol(); return KWD_LONG; }
+	unsigned { updateCol(); return KWD_UNSIGNED; }
+	signed   { updateCol(); return KWD_SIGNED; }
 
-	static   { updateCol(); return static; }
-	typedef  { updateCol(); return typedef; }
+	static   { updateCol(); return KWD_STATIC; }
+	typedef  { updateCol(); return KWD_TYPEDEF; }
 
-	sizeof   { updateCol(); return sizeof; }
-	struct   { updateCol(); return struct; }
+	sizeof   { updateCol(); return KWD_SIZEOF; }
+	struct   { updateCol(); return KWD_STRUCT; }
 	
  /* Operators */;
 	//TODO: Support all operators in mC (done)
@@ -118,6 +118,7 @@ yylineno = 1;
 
  /* Constants */;
 {integer}       { updateCol(); return INT; }
+	// If there is an error on the line below ({integerlead0}), then add this line of code below integer above the Keywords call: integerlead0    0[0-9]+    |this should fix the issue 
 {integerlead0}  { updateCol(); yyerror = "Integers mayy not have leading zero"; return ERROR; }				//TODO: "Integers may not have leading zeros" (done)
 {character}     { updateCol(); return CHAR; }
 {string}        { updateCol(); return processString(); }
