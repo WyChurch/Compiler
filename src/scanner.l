@@ -130,8 +130,9 @@ yylineno = 1;
 {string}        { updateCol(); return processString(); }
 {untermstring}  { updateCol(); yyerror = "Unterminated string"; return ERROR; }
 {multlnstring}  { updateCol(); countLines(); yyerror = "String spans multiple lines"; return ERROR; } 		// Catching a multi-line string and generating an error.
+
  /* Comments */;
-{comment}       { updateCol(); return COMMENT; }										//TODO (done)
+{comment}       { updateCol(); return COMMENT; }									//TODO (done)
 {untermcomment} { updateCol(); countLines(); return COMMENT; }						//TODO (done)
 {multlncomment} { updateCol(); yyerror = "Unterminated comment"; return ERROR; }	//TODO (done)
 
