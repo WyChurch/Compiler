@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include "tokendef.h"
 
+whitespace  [ \t\r\f\v]+
+
 int scancol = 1;
 int yycol = 1;
 int scanlineno = 1;
@@ -50,34 +52,34 @@ yylineno = 1;
  /* Keywords */;
 	//TODO: Support all keywords in mC
 	/* Define keyword rules */
-	if       { updateCol(); return IF; }
-	else     { updateCol(); return ELSE; }
-	while    { updateCol(); return WHILE; }
-	do       { updateCol(); return DO; }
-	for      { updateCol(); return FOR; }
-	break    { updateCol(); return BREAK; }
-	continue { updateCol(); return CONTINUE; }
-	switch   { updateCol(); return SWITCH; }
-	case     { updateCol(); return CASE; }
-	default  { updateCol(); return DEFAULT; }
-	return   { updateCol(); return RETURN; }
-	goto     { updateCol(); return GOTO; }
+	if       { updateCol(); return if; }
+	else     { updateCol(); return else; }
+	while    { updateCol(); return while; }
+	do       { updateCol(); return do; }
+	for      { updateCol(); return for; }
+	break    { updateCol(); return break; }
+	continue { updateCol(); return continue; }
+	switch   { updateCol(); return switch; }
+	case     { updateCol(); return case; }
+	default  { updateCol(); return default; }
+	return   { updateCol(); return return; }
+	goto     { updateCol(); return goto; }
 
-	int      { updateCol(); return INT; }
-	char     { updateCol(); return CHAR; }
-	float    { updateCol(); return FLOAT; }
-	double   { updateCol(); return DOUBLE; }
-	void     { updateCol(); return VOID; }
-	short    { updateCol(); return SHORT; }
-	long     { updateCol(); return LONG; }
-	unsigned { updateCol(); return UNSIGNED; }
-	signed   { updateCol(); return SIGNED; }
+	int      { updateCol(); return int; }
+	char     { updateCol(); return char; }
+	float    { updateCol(); return float; }
+	double   { updateCol(); return double; }
+	void     { updateCol(); return void; }
+	short    { updateCol(); return short; }
+	long     { updateCol(); return long; }
+	unsigned { updateCol(); return unsigned; }
+	signed   { updateCol(); return signed; }
 
-	static   { updateCol(); return STATIC; }
-	typedef  { updateCol(); return TYPEDEF; }
+	static   { updateCol(); return static; }
+	typedef  { updateCol(); return typedef; }
 
-	sizeof   { updateCol(); return SIZEOF; }
-	struct   { updateCol(); return STRUCT; }
+	sizeof   { updateCol(); return sizeof; }
+	struct   { updateCol(); return struct; }
 	
  /* Operators */;
 	//TODO: Support all operators in mC
@@ -103,8 +105,8 @@ yylineno = 1;
 {multlncomment} //TODO
 
  /* Other */;
-{newline}	{ scanlineno++; yycol = 1; updateCol();}       //TODO (done), this resets the column count when it hit a newline or \n
-{whitespace}    //TODO
+{newline}		{ scanlineno++; yycol = 1; updateCol();}       	//TODO (done), this resets the column count when it hit a newline or \n
+{whitespace}    { updateCol(); }								//TODO (done) Ignores whitspace
 .               {return ILLEGAL_TOK;}
 
 %%
@@ -125,9 +127,49 @@ void countLines(){
 }
 
 
-int processString(){
+int processString(const char* str){
 	// TODO: Process a string literal and return the appropriate microsyntax.
 
-	
+	char processedStr[1024];			//Buffer for processed string
+	int i =0, j = 0;
+
+	while(str[i] != '\0') {
+
+		if(str[i] == '\\'){				//Handle escape sequences
+
+			i++;
+			switch(str[i]) {
+
+				case 'n': 
+					processedStr[j++] = '\n';
+					break;
+				case 't':
+					processedStr[j++] = '\t';
+					break;
+				case '\\':
+					processedStr[j++] = '\\';
+					break;
+				case '"':
+					processedStr[j++] = '"';
+					break;
+				default;
+					yyerror = "illegal escape sequence";
+					return ERROR;
+ 
+			}
+
+		} else {
+
+			processed[j++] = str[i];
+
+		}
+
+		i++;
+
+	}
+
+	processedStr[j] = '\0';
+	printf("Processed String: %s\n", processedStr);		//Debugging output
+	return STRING;										//Return string token
 
 }
