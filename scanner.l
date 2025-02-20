@@ -80,7 +80,10 @@ yylineno = 1;
 	"&&"	{ updateCol(); return OPER_AND; }
 	"||"	{ updateCol(); return OPER_OR; }
 	"!"		{ updateCol(); return OPER_NOT; }
-	"["		{ updateCol(); return LSQ_BRKT; }
+
+
+ /* Delimiter */
+ 	"["		{ updateCol(); return LSQ_BRKT; }
 	"]"		{ updateCol(); return RSQ_BRKT; }
 	"{"		{ updateCol(); return LCRLY_BRKT; }
 	"}"		{ updateCol(); return RCRLY_BRKT; }
@@ -89,12 +92,9 @@ yylineno = 1;
 	","		{ updateCol(); return COMMA; }
 	";"		{ updateCol(); return SEMICLN; }
 
-
- /* Delimiter */
-
  /* Identifiers */;
-{identifier}    //TODO
-{illidentifier} //TODO
+{identifier}    {updateCol(); return ID;}
+{illidentifier} {updateCol();return ILLEGAL_TOK;}
 
  /* Constants */;
 {integer}       //TODO
