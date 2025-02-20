@@ -1,0 +1,19 @@
+int int
+if else
+int abc = 27;
+efg int = 012;
+string mango = "tropical \t fruit"
+'b'
+"this is a \n multiline string"
+"this string is unterminated
+/*comment :)*/
+char initial = lowercase('B');
+while (abc < 64) {abc ++;}
+int [4]
+void lowercase();
+if(abc + 36 == 100)
+else abc = 4+7-2/1
+/*unterminated comment :(
+int 1abc
+"This \"string\" is valid"
+"This string\\ is \b not"
