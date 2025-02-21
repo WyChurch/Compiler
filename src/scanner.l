@@ -17,18 +17,18 @@ int processString(); //TODO: Implement this function to check for illegal escape
 %}
 
 integerlead0    0[0-9]+
-integer         [1-9][0-9]+
+integer         0|([1-9][0-9]*)
 newline   		\n
 whitespace      [ \t\r\f\v]+
-character       \'([^\'\\]|\\.)\'
+character       \'(\\.|[^'\\])\'
 
 /* String can contain any characters between the double quotes other than a newline or
 // unescaped doublequotes.
 */
-string       	\"([^\"]|\\.)*\"
+string       	\"([^\"\n]|\\.)*\"
 
 /* multiline string has \n somewhere in the middle */
-multlnstring 	\"([^\"]|\\.)*\n([^\"]|\\.)*\"
+multlnstring 	\"([^\"\n]|\\.)*\n([^\"\n]|\\.)*\"
 
 /* If the end quote is found, one of the two regexes above will be matched. Otherwise,
 // the string is unterminated.
@@ -36,11 +36,11 @@ multlnstring 	\"([^\"]|\\.)*\n([^\"]|\\.)*\"
 untermstring 	\"([^\"\n]|\\.)*
 
 comment         "//".*
-multlncomment   "/\*([^*]|\*+[^*/])*\*+/"
-untermcomment   "/\*([^*]|\*+[^*/])*"
+multlncomment   "/\\*([^*]|\\*+[^*/])*\\*+/"
+untermcomment   "/\\*([^*]|\\*+[^*/])*"
 
-identifier      [a-zA-Z_][a-zA-Z0-9+]*
-illidentifier   [0-9][a-zA-Z0-9]*
+identifier      [a-zA-Z_][a-zA-Z0-9]*
+illidentifier   [0-9][a-zA-Z0-9_]*
 
 yylineno = 1;
 
@@ -125,8 +125,8 @@ yylineno = 1;
 
  /* Constants */;
 {integerlead0}  { updateCol(); yyerror = "There should be no leading zeros"; return ERROR; } //TODO: "Integers may not have leading zeros" (done)
-{integer}       { updateCol(); return KWD_INT; }		
-{character}     { updateCol(); return KWD_CHAR; }
+{integer}       { updateCol(); return INTCONST; }
+{character}     { updateCol(); return CHARCONST; }
 {string}        { updateCol(); return processString(); }
 {untermstring}  { updateCol(); yyerror = "Unterminated string"; return ERROR; }
 {multlnstring}  { updateCol(); countLines(); yyerror = "String spans multiple lines"; return ERROR; } 		// Catching a multi-line string and generating an error.
@@ -139,7 +139,7 @@ yylineno = 1;
  /* Other */;
 {newline}		{ scanlineno++; yycol = 1; updateCol(); }       	//TODO (done), this resets the column count when it hit a newline or \n
 {whitespace}    { updateCol(); }								//TODO (done) Ignores whitspace
-.               { return ERROR; }
+.               { printf("Unmatched input: %s\n", yytext); return ERROR; }
 
 %%
 
