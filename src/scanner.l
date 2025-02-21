@@ -16,23 +16,20 @@ void countLines(); //TODO: Implement this function to keep track of line numbers
 int processString(); //TODO: Implement this function to check for illegal escape sequences in string literals and print out escape sequences correctly. (done)
 %}
 
-integer         0|[1-9][0-9]*
-integerlead0    0[0-9]+
+integerlead0    [0][0-9]+
+integer         [1-9][0-9]*
+
 newline   		\n
 whitespace      [ \t\r\f\v]+
 character       \'(\\.|[^'\\])\'
 
-/* String can contain any characters between the double quotes other than a newline or
-// unescaped doublequotes.
-*/
+/* String can contain any characters between the double quotes other than a newline or unescaped doublequotes.*/
 string       	\"([^\"\n]|\\.)*\"
 
 /* multiline string has \n somewhere in the middle */
 multlnstring 	\"([^\"\n]|\\.)*\n([^\"\n]|\\.)*\"
 
-/* If the end quote is found, one of the two regexes above will be matched. Otherwise,
-// the string is unterminated.
-*/
+/* If the end quote is found, one of the two regexes above will be matched. Otherwise, the string is unterminated.*/
 untermstring 	\"([^\"\n]|\\.)*
 
 comment         "//".*
@@ -119,9 +116,6 @@ yylineno = 1;
 	",";	{ updateCol(); return COMMA; }
 	";";	{ updateCol(); return SEMICLN; }
 
- /* Identifiers */;
-{identifier}    { updateCol(); return ID; } 	//TODO (done)
-{illidentifier} { updateCol(); yyerror = "Illegal idetifier: Cannot start with a digit"; return ERROR; } 	//TODO (done)
 
  /* Constants */;
 {integerlead0}  { updateCol(); yyerror = "There should be no leading zeros"; return ERROR; } //TODO: "Integers may not have leading zeros" (done)
@@ -130,6 +124,10 @@ yylineno = 1;
 {string}        { updateCol(); return processString(); }
 {untermstring}  { updateCol(); yyerror = "Unterminated string"; return ERROR; }
 {multlnstring}  { updateCol(); countLines(); yyerror = "String spans multiple lines"; return ERROR; } 		// Catching a multi-line string and generating an error.
+
+ /* Identifiers */;
+{identifier}    { updateCol(); return ID; } 	//TODO (done)
+{illidentifier} { updateCol(); yyerror = "Illegal idetifier: Cannot start with a digit"; return ERROR; } 	//TODO (done)
 
  /* Comments */;
 {comment}       { updateCol(); return COMMENT; }									//TODO (done)
@@ -203,6 +201,7 @@ int processString(){
 
 	processedStr[j] = '\0';
 	printf("Processed String: %s\n", processedStr);		//Debugging output
-	return KWD_STRING;										//Return string token
+	return STRCONST;										//Return string token
 
 }
+
