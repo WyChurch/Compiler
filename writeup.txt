@@ -1,0 +1,9 @@
+Julie Hargrave, Samantha Nava, Wyatt Churchman  CS 4318.251
+
+Julie Hargrave - adjusting driver and scanner files, general debuging, test.txt
+Samantha Nava - general debuging
+Wyatt Churchman - most of the definitions and methods, debuging
+
+In the test.txt file, the line: "efg int = 012;" will test for a leading zero in an integer constant.
+The line: "'b'" is supposed to read a char constant. All of the provided keywords are tested and each error
+is tested as well.
