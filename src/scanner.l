@@ -3,7 +3,7 @@
 
 %{
 #include <stdio.h>
-#include "tokendef.h"
+#include <tokendef.h>
 
 int scancol = 1;
 int yycol = 1;
@@ -46,73 +46,73 @@ yylineno = 1;
  /* rules */;
 
  /* Keywords */;
-	"if";       { updateCol(); return KWD_IF; }
-	"else";     { updateCol(); return KWD_ELSE; }
-	"while";    { updateCol(); return KWD_WHILE; }
-	"do";       { updateCol(); return KWD_DO; }
-	"for";      { updateCol(); return KWD_FOR; }
-	"break";    { updateCol(); return KWD_BREAK; }
-	"continue"; { updateCol(); return KWD_CONTINUE; }
-	"switch";   { updateCol(); return KWD_SWITCH; }
-	"case";     { updateCol(); return KWD_CASE; }
-	"default";  { updateCol(); return KWD_DEFAULT; }
-	"return";   { updateCol(); return KWD_RETURN; }
-	"goto";     { updateCol(); return KWD_GOTO; }
+"if"       { updateCol(); return KWD_IF; }
+"else"     { updateCol(); return KWD_ELSE; }
+"while"    { updateCol(); return KWD_WHILE; }
+"do"       { updateCol(); return KWD_DO; }
+"for"      { updateCol(); return KWD_FOR; }
+"break"    { updateCol(); return KWD_BREAK; }
+"continue" { updateCol(); return KWD_CONTINUE; }
+"switch"   { updateCol(); return KWD_SWITCH; }
+"case"     { updateCol(); return KWD_CASE; }
+"default"  { updateCol(); return KWD_DEFAULT; }
+"return"   { updateCol(); return KWD_RETURN; }
+"goto"     { updateCol(); return KWD_GOTO; }
 
-	"int";      { updateCol(); return KWD_INT; }
-	"char";     { updateCol(); return KWD_CHAR; }
-	"float";    { updateCol(); return KWD_FLOUT; }
-	"double";   { updateCol(); return KWD_DOUBLE; }
-	"void";     { updateCol(); return KWD_VOID; }
-	"short";    { updateCol(); return KWD_SHORT; }
-	"long";     { updateCol(); return KWD_LONG; }
-	"unsigned"; { updateCol(); return KWD_UNSIGNED; }
-	"signed";   { updateCol(); return KWD_SIGNED; }
+"int"      { updateCol(); return KWD_INT; }
+"char"     { updateCol(); return KWD_CHAR; }
+"float"    { updateCol(); return KWD_FLOUT; }
+"double"   { updateCol(); return KWD_DOUBLE; }
+"void"     { updateCol(); return KWD_VOID; }
+"short"    { updateCol(); return KWD_SHORT; }
+"long"     { updateCol(); return KWD_LONG; }
+"unsigned" { updateCol(); return KWD_UNSIGNED; }
+"signed"   { updateCol(); return KWD_SIGNED; }
 
-	"static";   { updateCol(); return KWD_STATIC; }
-	"typedef";  { updateCol(); return KWD_TYPEDEF; }
+"static"   { updateCol(); return KWD_STATIC; }
+"typedef"  { updateCol(); return KWD_TYPEDEF; }
 
-	"sizeof";   { updateCol(); return KWD_SIZEOF; }
-	"struct";   { updateCol(); return KWD_STRUCT; }
+"sizeof"   { updateCol(); return KWD_SIZEOF; }
+"struct"   { updateCol(); return KWD_STRUCT; }
 	
  /* Operators */;
 	//TODO: Support all operators in mC (done)
-	"+";	{ updateCol(); return OPER_ADD; }
-	"-";	{ updateCol(); return OPER_SUB; }
-	"*";	{ updateCol(); return OPER_MUL; }
-	"/";	{ updateCol(); return OPER_DIV; }
-	"%%";	{ updateCol(); return OPER_MOD; }
-	"<";	{ updateCol(); return OPER_LT; }
-	">";	{ updateCol(); return OPER_GT; }
-	"<=";	{ updateCol(); return OPER_LTE; }
-	">=";	{ updateCol(); return OPER_GTE; }
-	"==";	{ updateCol(); return OPER_EQ; }
-	"!=";	{ updateCol(); return OPER_NEQ; }
-	"=";	{ updateCol(); return OPER_ASGN; }
-	"@";	{ updateCol(); return OPER_AT; }
-	"++";	{ updateCol(); return OPER_INC; }
-	"--";	{ updateCol(); return OPER_DEC; }
-	"&&";	{ updateCol(); return OPER_AND; }
-	"||";	{ updateCol(); return OPER_OR; }
-	"!";	{ updateCol(); return OPER_NOT; }
-	"[";	{ updateCol(); return LSQ_BRKT; }
-	"]"; 	{ updateCol(); return RSQ_BRKT; }
-	"{";	{ updateCol(); return LCRLY_BRKT; }
-	"}";	{ updateCol(); return RCRLY_BRKT; }
-	"(";	{ updateCol(); return LPAREN; }
-	")";	{ updateCol(); return RPAREN; }
-	",";	{ updateCol(); return COMMA; }
-	";";	{ updateCol(); return SEMICLN; }
+"+"		{ updateCol(); return OPER_ADD; }
+"-"		{ updateCol(); return OPER_SUB; }
+"*"		{ updateCol(); return OPER_MUL; }
+"/"		{ updateCol(); return OPER_DIV; }
+"%%"	{ updateCol(); return OPER_MOD; }
+"<"		{ updateCol(); return OPER_LT; }
+">"		{ updateCol(); return OPER_GT; }
+"<="	{ updateCol(); return OPER_LTE; }
+">="	{ updateCol(); return OPER_GTE; }
+"=="	{ updateCol(); return OPER_EQ; }
+"!="	{ updateCol(); return OPER_NEQ; }
+"="		{ updateCol(); return OPER_ASGN; }
+"@"		{ updateCol(); return OPER_AT; }
+"++"	{ updateCol(); return OPER_INC; }
+"--"	{ updateCol(); return OPER_DEC; }
+"&&"	{ updateCol(); return OPER_AND; }
+"||"	{ updateCol(); return OPER_OR; }
+"!"		{ updateCol(); return OPER_NOT; }
+"["		{ updateCol(); return LSQ_BRKT; }
+"]" 	{ updateCol(); return RSQ_BRKT; }
+"{"		{ updateCol(); return LCRLY_BRKT; }
+"}"		{ updateCol(); return RCRLY_BRKT; }
+"("		{ updateCol(); return LPAREN; }
+")"		{ updateCol(); return RPAREN; }
+","		{ updateCol(); return COMMA; }
+";"		{ updateCol(); return SEMICLN; }
 
  /* Delimiter */
-	"[";	{ updateCol(); return LSQ_BRKT; }
-	"]";	{ updateCol(); return RSQ_BRKT; }
-	"{";	{ updateCol(); return LCRLY_BRKT; }
-	"}";	{ updateCol(); return RCRLY_BRKT; }
-	"(";	{ updateCol(); return LPAREN; }
-	")";	{ updateCol(); return RPAREN; }
-	",";	{ updateCol(); return COMMA; }
-	";";	{ updateCol(); return SEMICLN; }
+"["		{ updateCol(); return LSQ_BRKT; }
+"]"		{ updateCol(); return RSQ_BRKT; }
+"{"		{ updateCol(); return LCRLY_BRKT; }
+"}"		{ updateCol(); return RCRLY_BRKT; }
+"("		{ updateCol(); return LPAREN; }
+")"		{ updateCol(); return RPAREN; }
+","		{ updateCol(); return COMMA; }
+";"		{ updateCol(); return SEMICLN; }
 
 
  /* Constants */;
