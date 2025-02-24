@@ -205,3 +205,7 @@ int processString(){
 
 }
 
+int main() {
+    yylex();
+    return 0;
+}

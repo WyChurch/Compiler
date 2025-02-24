@@ -7,6 +7,7 @@
 extern char *yytext;
 
 extern int yylineno;
+extern int yylex();
 extern int yycol;
 extern char* yyerror;
 
