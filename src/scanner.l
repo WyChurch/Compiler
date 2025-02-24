@@ -43,11 +43,9 @@ yylineno = 1;
 
 %%
 
- /* rules */
+ /* rules */;
 
  /* Keywords */;
-	//TODO: Support all keywords in mC
-	/* Define keyword rules */
 	"if";       { updateCol(); return KWD_IF; }
 	"else";     { updateCol(); return KWD_ELSE; }
 	"while";    { updateCol(); return KWD_WHILE; }
