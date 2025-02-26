@@ -44,7 +44,8 @@ ________________________________________________________________________________
 In the folder of Compiler-Project run this command:
 
     ./obj/scanner < path/of/mC/file.mc
-    Example from Phase 1 of Project: ./obj/scanner < src/test.mc
+### Example (From Phase 1:
+    ./obj/scanner < src/test.mc
 
 _____________________________________________________________________________________________ 
 
