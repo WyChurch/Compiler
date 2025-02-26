@@ -40,6 +40,31 @@ ________________________________________________________________________________
 
 _____________________________________________________________________________________________ 
 
+
+## How to run Flex and MakeFile:
+To debug and test that your code can use MakeFile, use this command:
+
+    flex src/scanner.l
+This should create a lex.c file and in the terminal there will be debugging error or warnigns if you have any.
+
+After checking for errors and warning you can clean the file using this command:
+
+    make clean
+
+Lastly we will make the obj folder, use this command:
+
+    make
+
+Every time you want to update the code and run test you have to use this sequence of commands after you have saved the updated code:
+
+    make clean
+    flex src/scanner.l (this is only needed if you want to debug)
+    make clean
+    make
+
+_____________________________________________________________________________________________ 
+
+
 ## How to run Scanner:
 In the folder of Compiler-Project run this command:
 
