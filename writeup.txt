@@ -4,9 +4,9 @@ Julie Hargrave, Samantha Nava, Wyatt Churchman  CS 4318.251
 _______________________________________________________________________________________________________________
 
 
-Julie Hargrave - adjusting driver and scanner files, general debuging, test.mc
-Samantha Nava - general debuging
-Wyatt Churchman - most of the definitions and methods, debuging
+Julie Hargrave - adjusting driver and scanner files, general debugging, test.mc
+Samantha Nava - general debugging
+Wyatt Churchman - most of the definitions and methods, debugging
 
 _______________________________________________________________________________________________________________
 
@@ -33,13 +33,13 @@ What you need to download:
 _____________________________________________________________________________________________        
         
 
-Extentions used in VSCode:
+Extensions used in VSCode:
         -----------------------------------------------------------------------------
         Lex: Lex & Flex Syntax Highlighting
         -----------------------------------------------------------------------------
         CMake: CMake langage support for VSCode
         -----------------------------------------------------------------------------
-        CMake Tools: Extened CMake support in VSCode
+        CMake Tools: Extended CMake support in VSCode
         -----------------------------------------------------------------------------
         Makefile Tools: Provide makefile support in VSCode
         -----------------------------------------------------------------------------
