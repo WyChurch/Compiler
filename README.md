@@ -42,9 +42,10 @@ ________________________________________________________________________________
 
 
 ## How to run Flex and MakeFile:
-To debug and test that your code can use MakeFile, use this command:
+To debug and test your code, you can use MakeFile, use this command:
 
     flex src/scanner.l
+    
 This should create a lex.c file and in the terminal there will be debugging error or warnigns if you have any.
 
 After checking for errors and warnings, you can clean the file using this command:
