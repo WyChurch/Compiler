@@ -1,12 +1,54 @@
 Julie Hargrave, Samantha Nava, Wyatt Churchman  CS 4318.251
 
+_______________________________________________________________________________________________________________
+
+
 Julie Hargrave - adjusting driver and scanner files, general debuging, test.mc
 Samantha Nava - general debuging
 Wyatt Churchman - most of the definitions and methods, debuging
+
+_______________________________________________________________________________________________________________
+
 
 In the test.txt file, the line: "efg int = 012;" will test for a leading zero in an integer constant.
 The line: "'b'" is supposed to read a char constant. All of the provided keywords are tested and each error
 is tested as well.
 
+_______________________________________________________________________________________________________________
+
+
+What you need to download:
+    Flex: (In Terminal/Command Line)
+        -----------------------------------------------------------------------------
+        MAC:        brew install flex
+        -----------------------------------------------------------------------------
+        Windows:    Install MSYS2 from msys2.org
+                    Then run the following command to install Flex: pacman -S flex
+        -----------------------------------------------------------------------------
+        Linux:      sudo apt update
+                    sudo apt install flex
+        -----------------------------------------------------------------------------
+
+_____________________________________________________________________________________________        
+        
+
+Extentions used in VSCode:
+        -----------------------------------------------------------------------------
+        Lex: Lex & Flex Syntax Highlighting
+        -----------------------------------------------------------------------------
+        CMake: CMake langage support for VSCode
+        -----------------------------------------------------------------------------
+        CMake Tools: Extened CMake support in VSCode
+        -----------------------------------------------------------------------------
+        Makefile Tools: Provide makefile support in VSCode
+        -----------------------------------------------------------------------------
+        Txt Syntax: Highlight text files
+        -----------------------------------------------------------------------------
+
+_______________________________________________________________________________________________________________
+
+
 To check test.mc, run:
-./obj/scanner < src/test.mc
+    ./obj/scanner < src/test.mc
+
+_______________________________________________________________________________________________________________
