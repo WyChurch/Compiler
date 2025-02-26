@@ -58,8 +58,6 @@ Lastly we will make the obj folder, use this command:
 Every time you want to update the code and run test you have to use this sequence of commands after you have saved the updated code:
 
     make clean
-    flex src/scanner.l (this is only needed if you want to debug)
-    make clean
     make
 
 _____________________________________________________________________________________________ 
