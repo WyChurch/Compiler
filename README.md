@@ -16,7 +16,7 @@ This is only if you are changing code or using MakeFile.
                 MAC:        brew install flex
                 -----------------------------------------------------------------------------
                 Windows:    Install MSYS2 from msys2.org
-                                    Then run the following command to install Flex: pacman -S flex
+                            Then run the following command to install Flex: pacman -S flex
                 -----------------------------------------------------------------------------
                 Linux:      sudo apt update
                             sudo apt install flex
