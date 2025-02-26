@@ -10,6 +10,7 @@ ________________________________________________________________________________
 
 ## What you need to download:
 This is only if you are changing code or using MakeFile.
+
     Flex: (In Terminal/Command Line)
         -----------------------------------------------------------------------------
         MAC:        brew install flex
