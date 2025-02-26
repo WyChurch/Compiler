@@ -367,27 +367,27 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[198] =
     {   0,
-        0,    0,   73,   71,   70,   69,   43,   62,   30,   71,
-       71,   48,   49,   28,   26,   50,   27,   29,   65,   59,
-       51,   31,   37,   32,   38,   64,   44,   45,   64,   64,
-       64,   64,   64,   64,   64,   64,   64,   64,   64,   64,
-       64,   64,   46,   71,   47,   70,   36,   62,    0,   61,
-       62,   41,    0,    0,   39,   40,   66,    0,   58,   65,
-       59,   33,   35,   34,   64,   64,   64,   64,   64,   64,
-        4,   64,   64,   64,   64,    1,   64,   64,   64,   64,
-       64,   64,   64,   64,   64,   64,   64,   42,    0,   63,
-        0,   62,   61,   62,   60,   66,    0,   64,   64,   64,
+        0,    0,   73,   60,   59,   58,   43,   60,   30,   60,
+       60,   48,   49,   28,   26,   50,   27,   29,   60,   60,
+       51,   31,   37,   32,   38,   60,   44,   45,   60,   60,
+       60,   60,   60,   60,   60,   60,   60,   60,   60,   60,
+       60,   60,   46,   60,   47,   59,   36,   65,    0,   64,
+       65,   41,    0,    0,   39,   40,   69,    0,   61,   68,
+       62,   33,   35,   34,   67,   67,   67,   67,   67,   67,
+        4,   67,   67,   67,   67,    1,   67,   67,   67,   67,
+       67,   67,   67,   67,   67,   67,   67,   42,    0,   66,
+        0,   65,   64,   65,   63,   69,    0,   67,   67,   67,
 
-       64,   64,   64,   64,   64,    5,   64,   13,   64,   64,
-       64,   64,   64,   64,   64,   64,   64,   64,   64,   64,
-        0,   63,    0,    0,   64,    9,   14,   64,   64,   64,
-        2,   64,   12,   19,   64,   64,   64,   64,   64,   64,
-       64,   64,   64,   17,   64,    0,    6,   64,   64,   64,
-       15,   64,   18,   64,   64,   64,   64,   64,   64,   64,
-        3,    0,   64,   64,   16,   11,   21,   24,   22,   25,
-        8,   64,   64,    0,   64,   10,   23,   64,    0,    7,
+       67,   67,   67,   67,   67,    5,   67,   13,   67,   67,
+       67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
+        0,   66,    0,    0,   67,    9,   14,   67,   67,   67,
+        2,   67,   12,   19,   67,   67,   67,   67,   67,   67,
+       67,   67,   67,   17,   67,    0,    6,   67,   67,   67,
+       15,   67,   18,   67,   67,   67,   67,   67,   67,   67,
+        3,    0,   67,   67,   16,   11,   21,   24,   22,   25,
+        8,   67,   67,    0,   67,   10,   23,   67,    0,    7,
        20,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,   67,    0,    0,    0,   68,    0
+        0,   70,    0,    0,    0,   71,    0
 
     } ;
 
@@ -1164,86 +1164,86 @@ YY_RULE_SETUP
 #line 115 "src/scanner.l"
 { updateCol(); return SEMICLN; }
 	YY_BREAK
-/* Constants */;
+/* Other */;
 case 58:
+/* rule 58 can match eol */
 YY_RULE_SETUP
-#line 119 "src/scanner.l"
-{ updateCol(); yyerror = "There should be no leading zeros"; return ERROR; } //TODO: "Integers may not have leading zeros" (done)
+#line 118 "src/scanner.l"
+{ scanlineno++; yycol = 1; countLines(); }       	//TODO (done), this resets the column count when it hit a newline or \n
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 120 "src/scanner.l"
-{ updateCol(); return INTCONST; }
+#line 119 "src/scanner.l"
+{ updateCol(); }								//TODO (done) Ignores whitspace
 	YY_BREAK
 case 60:
-/* rule 60 can match eol */
 YY_RULE_SETUP
-#line 121 "src/scanner.l"
-{ updateCol(); return CHARCONST; }
+#line 120 "src/scanner.l"
+{ printf("Unmatched input: %s\n", yytext); return ERROR; }
 	YY_BREAK
+/* Constants */;
 case 61:
 YY_RULE_SETUP
-#line 122 "src/scanner.l"
-{ updateCol(); return processString(); }
+#line 123 "src/scanner.l"
+{ updateCol(); yyerror = "There should be no leading zeros"; return ERROR; } //TODO: "Integers may not have leading zeros" (done)
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 123 "src/scanner.l"
-{ updateCol(); yyerror = "Unterminated string"; return ERROR; }
+#line 124 "src/scanner.l"
+{ updateCol(); return INTCONST; }
 	YY_BREAK
 case 63:
 /* rule 63 can match eol */
 YY_RULE_SETUP
-#line 124 "src/scanner.l"
-{ updateCol(); countLines(); yyerror = "String spans multiple lines"; return ERROR; } 		// Catching a multi-line string and generating an error.
+#line 125 "src/scanner.l"
+{ updateCol(); return CHARCONST; }
 	YY_BREAK
-/* Identifiers */;
 case 64:
 YY_RULE_SETUP
-#line 127 "src/scanner.l"
-{ updateCol(); return ID; } 	//TODO (done)
+#line 126 "src/scanner.l"
+{ updateCol(); return processString(); }
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 128 "src/scanner.l"
-{ updateCol(); yyerror = "Illegal idetifier: Cannot start with a digit"; return ERROR; } 	//TODO (done)
+#line 127 "src/scanner.l"
+{ updateCol(); yyerror = "Unterminated string"; return ERROR; }
 	YY_BREAK
-/* Comments */;
 case 66:
+/* rule 66 can match eol */
 YY_RULE_SETUP
-#line 131 "src/scanner.l"
-{ updateCol(); return COMMENT; }									//TODO (done)
+#line 128 "src/scanner.l"
+{ yyerror = "String spans multiple lines"; return ERROR; } 		// Catching a multi-line string and generating an error.
 	YY_BREAK
+/* Identifiers */;
 case 67:
 YY_RULE_SETUP
-#line 132 "src/scanner.l"
-{ updateCol(); countLines(); return COMMENT; }						//TODO (done)
+#line 131 "src/scanner.l"
+{ updateCol(); return ID; } 	//TODO (done)
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 133 "src/scanner.l"
-{ updateCol(); yyerror = "Unterminated comment"; return ERROR; }	//TODO (done)
+#line 132 "src/scanner.l"
+{ updateCol(); yyerror = "Illegal idetifier: Cannot start with a digit"; return ERROR; } 	//TODO (done)
 	YY_BREAK
-/* Other */;
+/* Comments */;
 case 69:
-/* rule 69 can match eol */
 YY_RULE_SETUP
-#line 136 "src/scanner.l"
-{ scanlineno++; yycol = 1; updateCol(); }       	//TODO (done), this resets the column count when it hit a newline or \n
+#line 135 "src/scanner.l"
+{ updateCol(); return COMMENT; }									//TODO (done)
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 137 "src/scanner.l"
-{ updateCol(); }								//TODO (done) Ignores whitspace
+#line 136 "src/scanner.l"
+{ updateCol(); countLines(); return COMMENT; }						//TODO (done)
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 138 "src/scanner.l"
-{ printf("Unmatched input: %s\n", yytext); return ERROR; }
+#line 137 "src/scanner.l"
+{ yyerror = "Unterminated comment"; return ERROR; }	//TODO (done)
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 140 "src/scanner.l"
+#line 139 "src/scanner.l"
 ECHO;
 	YY_BREAK
 #line 1249 "obj/lex.yy.c"
@@ -2251,7 +2251,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 140 "src/scanner.l"
+#line 139 "src/scanner.l"
 
 
 /* user routines */
@@ -2266,7 +2266,8 @@ void updateCol(){
 void countLines(){
 	//TODO: Count the number of lines (done)
 
-	scanlineno++;
+	yylineno++;
+
 }
 
 /* Process String Literal (Uses yytext Directly) */

@@ -113,6 +113,10 @@ yylineno = 1;
 ","		{ updateCol(); return COMMA; }
 ";"		{ updateCol(); return SEMICLN; }
 
+ /* Other */;
+{newline}		{ scanlineno++; yycol = 1; countLines(); }       	//TODO (done), this resets the column count when it hit a newline or \n
+{whitespace}    { updateCol(); }								//TODO (done) Ignores whitspace
+.               { printf("Unmatched input: %s\n", yytext); return ERROR; }
 
  /* Constants */;
 {integerlead0}  { updateCol(); yyerror = "There should be no leading zeros"; return ERROR; } //TODO: "Integers may not have leading zeros" (done)
@@ -120,7 +124,7 @@ yylineno = 1;
 {character}     { updateCol(); return CHARCONST; }
 {string}        { updateCol(); return processString(); }
 {untermstring}  { updateCol(); yyerror = "Unterminated string"; return ERROR; }
-{multlnstring}  { updateCol(); countLines(); yyerror = "String spans multiple lines"; return ERROR; } 		// Catching a multi-line string and generating an error.
+{multlnstring}  { yyerror = "String spans multiple lines"; return ERROR; } 		// Catching a multi-line string and generating an error.
 
  /* Identifiers */;
 {identifier}    { updateCol(); return ID; } 	//TODO (done)
@@ -129,12 +133,7 @@ yylineno = 1;
  /* Comments */;
 {comment}       { updateCol(); return COMMENT; }									//TODO (done)
 {untermcomment} { updateCol(); countLines(); return COMMENT; }						//TODO (done)
-{multlncomment} { updateCol(); yyerror = "Unterminated comment"; return ERROR; }	//TODO (done)
-
- /* Other */;
-{newline}		{ scanlineno++; yycol = 1; updateCol(); }       	//TODO (done), this resets the column count when it hit a newline or \n
-{whitespace}    { updateCol(); }								//TODO (done) Ignores whitspace
-.               { printf("Unmatched input: %s\n", yytext); return ERROR; }
+{multlncomment} { yyerror = "Unterminated comment"; return ERROR; }	//TODO (done)
 
 %%
 
@@ -150,7 +149,8 @@ void updateCol(){
 void countLines(){
 	//TODO: Count the number of lines (done)
 
-	scanlineno++;
+	yylineno++;
+
 }
 
 /* Process String Literal (Uses yytext Directly) */
