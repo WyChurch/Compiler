@@ -190,50 +190,6 @@ void printToken(int tokenNum) {
   return;
 }
 
-bool isKeyword(char* str){
-
-  // Checks for all different key
-    if (!strcmp(str, "if") || !strcmp(str, "else")
-    || !strcmp(str, "while") || !strcmp(str, "do")
-    || !strcmp(str, "break") || !strcmp(str, "continue")
-    || !strcmp(str, "int") || !strcmp(str, "double")
-    || !strcmp(str, "float") || !strcmp(str, "return")
-    || !strcmp(str, "char") || !strcmp(str, "case")
-    || !strcmp(str, "sizeof") || !strcmp(str, "long")
-    || !strcmp(str, "short") || !strcmp(str, "typedef")
-    || !strcmp(str, "switch") || !strcmp(str, "unsigned") 
-    || !strcmp(str, "void") || !strcmp(str, "static")
-    || !strcmp(str, "struct") || !strcmp(str, "goto")
-    || !strcmp(str, "string") || !strcmp(str, "default")
-    || !strcmp(str, "signed"))
-      return (1); // 1 = true
-  return (0);	// 0 = false
-
-}
-
-// Returns 'true' if the character is a DELIMITER.
-bool isDelimiter(char ch){
-
-  if (ch == ' ' || ch == '+' || ch == '-' || ch == '*' || 
-      ch == '/' || ch == ',' || ch == ';' || ch == '>' || 
-      ch == '<' || ch == '=' || ch == '(' || ch == ')' || 
-      ch == '[' || ch == ']' || ch == '{' || ch == '}')
-      return (1);
-  return (0);
-}
-
-// Returns 'true' if the string is a VALID IDENTIFIER.
-bool validIdentifier(char* str){
-
-  if (str[0] == '0' || str[0] == '1' || str[0] == '2' ||
-      str[0] == '3' || str[0] == '4' || str[0] == '5' || 
-      str[0] == '6' || str[0] == '7' || str[0] == '8' || 
-      str[0] == '9' || isDelimiter(str[0]) == 1)
-      return (0);
-  return (1);
-
-}
-
 int main() {
 
   int ret = yylex();
