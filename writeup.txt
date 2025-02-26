@@ -1,6 +1,6 @@
 Julie Hargrave, Samantha Nava, Wyatt Churchman  CS 4318.251
 
-Julie Hargrave - adjusting driver and scanner files, general debuging, test.txt
+Julie Hargrave - adjusting driver and scanner files, general debuging, test.mc
 Samantha Nava - general debuging
 Wyatt Churchman - most of the definitions and methods, debuging
 
@@ -8,5 +8,5 @@ In the test.txt file, the line: "efg int = 012;" will test for a leading zero in
 The line: "'b'" is supposed to read a char constant. All of the provided keywords are tested and each error
 is tested as well.
 
-To check test.txt, run:
-./obj <test.txt
+To check test.mc, run:
+./obj/scanner < src/test.mc
