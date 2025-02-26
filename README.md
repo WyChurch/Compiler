@@ -44,4 +44,10 @@ ________________________________________________________________________________
 In the folder of Compiler-Project run this command:
 
     ./obj/scanner < path/of/mC/file.mc
-    Example from phase 1 test: ./obj/scanner < src/test.mc
+    Example from Phase 1 of Project: ./obj/scanner < src/test.mc
+
+_____________________________________________________________________________________________ 
+
+## Dates:
+    Repository Last Updated: 2/26/2025
+    Phase 1 Completion (Scanner): 2/25/2025
