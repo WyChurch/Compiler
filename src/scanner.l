@@ -16,6 +16,8 @@ void countLines(); //TODO: Implement this function to keep track of line numbers
 int processString(); //TODO: Implement this function to check for illegal escape sequences in string literals and print out escape sequences correctly. (done)
 %}
 
+%option noyywrap
+
 integerlead0    [0][0-9]+
 integer         [1-9][0-9]*
 
@@ -76,12 +78,11 @@ yylineno = 1;
 "struct"   { updateCol(); return KWD_STRUCT; }
 	
  /* Operators */;
-	//TODO: Support all operators in mC (done)
 "+"		{ updateCol(); return OPER_ADD; }
 "-"		{ updateCol(); return OPER_SUB; }
 "*"		{ updateCol(); return OPER_MUL; }
 "/"		{ updateCol(); return OPER_DIV; }
-"%%"	{ updateCol(); return OPER_MOD; }
+"\%"	{ updateCol(); return OPER_MOD; }
 "<"		{ updateCol(); return OPER_LT; }
 ">"		{ updateCol(); return OPER_GT; }
 "<="	{ updateCol(); return OPER_LTE; }
@@ -105,8 +106,6 @@ yylineno = 1;
 ";"		{ updateCol(); return SEMICLN; }
 
  /* Delimiter */
-"["		{ updateCol(); return LSQ_BRKT; }
-"]"		{ updateCol(); return RSQ_BRKT; }
 "{"		{ updateCol(); return LCRLY_BRKT; }
 "}"		{ updateCol(); return RCRLY_BRKT; }
 "("		{ updateCol(); return LPAREN; }
@@ -201,9 +200,4 @@ int processString(){
 	printf("Processed String: %s\n", processedStr);		//Debugging output
 	return STRCONST;										//Return string token
 
-}
-
-int main() {
-    yylex();
-    return 0;
 }
