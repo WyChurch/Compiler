@@ -13,9 +13,6 @@ extern char* yyerror;
 
 void printToken(int tokenNum) {
   switch(tokenNum) {
-  case ID:
-    printf("<ID, %s> : (%d:%d)\n", yytext, yylineno, yycol);
-    break;
   case INTCONST:
     printf("<INTEGER, %s> : (%d:%d)\n", yytext, yylineno, yycol);
     break;
@@ -180,6 +177,9 @@ void printToken(int tokenNum) {
     break;
   case SEMICLN:
     printf("<PUNCTUATION, ;> : (%d:%d)\n", yylineno, yycol);
+    break;
+  case ID:
+    printf("<ID, %s> : (%d:%d)\n", yytext, yylineno, yycol);
     break;
   case ERROR:
     printf("<ERROR, %s> : (%d:%d)\n", yyerror, yylineno, yycol);

@@ -34,7 +34,7 @@ multlnstring 	\"([^\"\n]|\\.)*\n([^\"\n]|\\.)*\"
 /* If the end quote is found, one of the two regexes above will be matched. Otherwise, the string is unterminated.*/
 untermstring 	\"([^\"\n]|\\.)*
 
-comment         "//".*
+comment         "//.*|/\*[\s\S]*?\*/"
 multlncomment   "/\\*([^*]|\\*+[^*/])*\\*+/"
 untermcomment   "/\\*([^*]|\\*+[^*/])*"
 
@@ -197,7 +197,6 @@ int processString(){
 	}
 
 	processedStr[j] = '\0';
-	printf("Processed String: %s\n", processedStr);		//Debugging output
 	return STRCONST;										//Return string token
 
 }
