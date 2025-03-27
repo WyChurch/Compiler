@@ -33,12 +33,42 @@ char* scope = "";
 /*Add token declarations below. The type <value> indicates that the associated token will be of a value type such as integer, float etc., and <strval> indicates that the associated token will be of string type.*/
 %token <strval> ID
 %token <value> INTCONST
-/* TODO: Add the rest of the tokens below.*/
+%token <strval> CHARCONST
+%token <strval> STRCONST
 
+%token <strval> KWD_INT
+%token <strval> KWD_CHAR
+%token <strval> KWD_STRING
+%token <strval> KWD_VOID
+%token <strval> KWD_WHILE
+%token <strval> KWD_IF
+%token <strval> KWD_ELSE
+%token <strval> KWD_RETURN
+
+%token <strval> OPER_ADD
+%token <strval> OPER_SUB
+%token <strval> OPER_MUL
+%token <strval> OPER_DIV
+%token <strval> OPER_ASSN
+%token <strval> OPER_LT
+%token <strval> OPER_LTE
+%token <strval> OPER_EQ
+%token <strval> OPER_GTE
+%token <strval> OPER_GT
+%token <strval> OPER_NEQ
+
+%token <strval> LSQ_BRKT
+%token <strval> RSQ_BRKT
+%token <strval> LCRLY_BRKT
+%token <strval> RCRLY_BRKT
+%token <strval> LPAREN
+%token <strval> RPAREN
+%token <strval> COMMA
+%token <strval> SEMICLN
 
 /* TODO: Declate non-terminal symbols as of type node. Provided below is one example. node is defined as 'struct treenode *node' in the above union data structure. This declaration indicates to parser that these non-terminal variables will be implemented using a 'treenode *' type data structure. Hence, the circles you draw when drawing a parse tree, the following lines are telling yacc that these will eventually become circles in an AST. This is one of the connections between the AST you draw by hand and how yacc implements code to concretize that. We provide with two examples: program and declList from the grammar. Make sure to add the rest.  */
 
-%type <node> program declList
+%type <node> program declList decl varDecl typeSpecifier funDecl formalDeclList formalDecl funBody localDeclList statementList statement compoundStmt assignStmt condStmt loopStmt returnStmt var expression relop addExpr addop term mulop factor funcCallExpr argList
 
 
 
@@ -71,6 +101,127 @@ declList        : decl
                     addChild(declListNode, $2);
                     $$ = declListNode;
                  }
+                ;
+
+decl            : varDecl
+                {
+                    tree* declNode = maketree(DECL);
+                    addChild(declNode, $1);
+                    $$ = declNode;
+                 }
+                | funDecl
+                {
+                    tree* declNode = maketree(DECL);
+                    addChild(declNode, $1);
+                    $$ = declNode;
+                 }
+                ;
+varDecl         : typeSpecifier ID LSQ_BRKT INTCONST RSQ_BRKT SEMICLN
+                {
+                    tree* varDeclNode = maketree(VARDECL);
+                    addChild(varDeclNode, $1);
+                    $$ = varDeclNode;
+                 }
+                | typeSpecifier ID SEMICLN
+                {
+                    tree* varDeclNode = maketree(VARDECL);
+                    addChild(varDeclNode, $1);
+                    $$ = varDeclNode;
+                 }
+                ;
+typeSpecifier   : KWD_INT
+                {
+                    tree* typeSpecNode = maketree(TYPESPEC);
+                    $$ = typeSpecNode;
+                 }
+                | KWD_CHAR
+                {
+                    tree* typeSpecNode = maketree(TYPESPEC);
+                    $$ = typeSpecNode;
+                 }
+                | KWD_STRING
+                {
+                    tree* typeSpecNode = maketree(TYPESPEC);
+                    $$ = typeSpecNode;
+                 }
+                | KWD_VOID
+                {
+                    tree* typeSpecNode = maketree(TYPESPEC);
+                    $$ = typeSpecNode;
+                 }
+                ;
+funDecl         : typeSpecifier ID LPAREN formalDeclList RPAREN funBody
+                | typeSpecifier ID LPAREN RPAREN funBody
+                ;
+formalDeclList  : formalDecl
+                | formalDecl COMMA formalDeclList
+                ;
+formalDecl      : typeSpecifier ID
+                | typeSpecifier ID LSQ_BRKT RSQ_BRKT
+funBody         : LCRLY_BRKT localDeclList statementList RCRLY_BRKT
+                ;
+localDeclList   : 
+                | varDecl localDeclList
+                ;
+statementList   :
+                | statement statementList
+                ;
+statement       : compoundStmt
+                | assignStmt
+                | condStmt
+                | loopStmt
+                | returnStmt
+                ;
+compoundStmt    : LCRLY_BRKT statementList RCRLY_BRKT
+                ;
+assignStmt      : var OPER_ASSN expression SEMICLN
+                | expression SEMICLN
+                ;
+condStmt        : KWD_IF LPAREN expression RPAREN statement
+                | KWD_IF LPAREN expression RPAREN statement KWD_ELSE statement
+                ;
+loopStmt        : KWD_WHILE LPAREN expression RPAREN statement
+                ;
+returnStmt      : KWD_RETURN SEMICLN
+                | KWD_RETURN expression SEMICLN
+                ;
+var             : ID
+                | ID RSQ_BRKT addExpr LSQ_BRKT
+                ;
+expression      : addExpr
+                | expression relop addExpr
+                ;
+relop           : OPER_LTE
+                | OPER_LT
+                | OPER_GT
+                | OPER_GTE
+                | OPER_EQ
+                | OPER_NEQ
+                ;
+addExpr         : term
+                | addExpr addop term
+                ;
+addop           : OPER_ADD
+                | OPER_SUB
+                ;
+term            : factor
+                | term mulop factor
+                ;
+mulop           : OPER_MUL
+                | OPER_DIV
+                ;
+factor          : LPAREN expression RPAREN
+                | var
+                | funcCallExpr
+                | INTCONST
+                | CHARCONST
+                | STRCONST
+                ;
+funcCallExpr    : ID LPAREN argList RPAREN
+                | ID LPAREN RPAREN
+                ;
+argList         : expression
+                | argList COMMA expression
                 ;
 
 %%

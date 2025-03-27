@@ -22,5 +22,3 @@ clean:
 	rm -rf obj
 	rm -f lex.yy.* *.o *~ scanner
 
-test: obj/scanner
-	@python ./test/testScanner.py
