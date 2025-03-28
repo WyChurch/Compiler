@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -I./src -std=gnu99
-LEX=lex
+LEX=flex
 
 obj/scanner: obj/lex.yy.o obj/driver.o
 	gcc $(CFLAGS) -o $@ $^ -ll
