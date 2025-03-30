@@ -71,10 +71,6 @@ char* scope = "";
 %type <node> program declList decl varDecl typeSpecifier funDecl formalDeclList formalDecl funBody localDeclList statementList statement compoundStmt assignStmt condStmt loopStmt returnStmt var expression relop addExpr addop term mulop factor funcCallExpr argList
 
 
-
-
-
-*/
 %start program
 
 %%
@@ -118,51 +114,62 @@ decl            : varDecl
                 ;
 varDecl         : typeSpecifier ID LSQ_BRKT INTCONST RSQ_BRKT SEMICLN
                 {
+                    ST_insert($2,scope,$1->val,ARRAY);
                     tree* varDeclNode = maketree(VARDECL);
                     addChild(varDeclNode, $1);
+                    tree* idNode = maketreeWithVal(IDENTIFIER,$2);
+                    addChild(varDeclNode, idNode);
+                    tree* integerNode = maketreeWithVal(INTEGER,$4); 
+                    addChild(varDeclNode, integerNode);
                     $$ = varDeclNode;
                  }
                 | typeSpecifier ID SEMICLN
                 {
+                    ST_insert($2,scope,$1->val,SCALAR);
                     tree* varDeclNode = maketree(VARDECL);
                     addChild(varDeclNode, $1);
+                    tree* idNode = maketreeWithVal(IDENTIFIER,$2);
+                    addChild(varDeclNode, idNode);
                     $$ = varDeclNode;
                  }
                 ;
 typeSpecifier   : KWD_INT
                 {
-                    tree* typeSpecNode = maketree(TYPESPEC);
+                    tree* typeSpecNode = maketreeWithVal(TYPESPEC, INT_TYPE);
                     $$ = typeSpecNode;
                  }
                 | KWD_CHAR
                 {
-                    tree* typeSpecNode = maketree(TYPESPEC);
-                    $$ = typeSpecNode;
-                 }
-                | KWD_STRING
-                {
-                    tree* typeSpecNode = maketree(TYPESPEC);
+                    tree* typeSpecNode = maketreeWithVal(TYPESPEC, CHAR_TYPE);
                     $$ = typeSpecNode;
                  }
                 | KWD_VOID
                 {
-                    tree* typeSpecNode = maketree(TYPESPEC);
+                    tree* typeSpecNode = maketreeWithVal(TYPESPEC, VOID_TYPE);
                     $$ = typeSpecNode;
                  }
                 ;
 funDecl         : typeSpecifier ID LPAREN formalDeclList RPAREN funBody
                 {
+                    ST_insert($2,scope,$1->val,FUNCTION)
+                    scope = $2;
                     tree* funDeclNode = maketree(FUNDECL);
                     addChild(funDeclNode, $1);
                     addChild(funDeclNode, $4);
                     addChild(funDeclNode, $6);
+                    tree* idNode = maketreeWithVal(IDENTIFIER,$2);
+                    addChild(funDeclNode, idNode);
                     $$ = funDeclNode;
                  }
                 | typeSpecifier ID LPAREN RPAREN funBody
                 {
+                    ST_insert($2,scope,$1->val,FUNCTION)
+                    scope = $2;
                     tree* funDeclNode = maketree(FUNDECL);
                     addChild(funDeclNode, $1);
                     addChild(funDeclNode, $6);
+                    tree* idNode = maketreeWithVal(IDENTIFIER,$2);
+                    addChild(funDeclNode, idNode);
                     $$ = funDeclNode;
                  }
                 ;
@@ -182,14 +189,20 @@ formalDeclList  : formalDecl
                 ;
 formalDecl      : typeSpecifier ID
                 {
+                    ST_insert($2,scope,$1->val,SCALAR);
                     tree* formDeclNode = maketree(FORMALDECL);
                     addChild(formDeclNode, $1);
+                    tree* idNode = maketreeWithVal(IDENTIFIER,$2);
+                    addChild(formDeclNode, idNode);
                     $$ = formDeclListNode;
                  }
                 | typeSpecifier ID LSQ_BRKT RSQ_BRKT
                 {
+                    ST_insert($2,scope,$1->val,ARRAY);
                     tree* formDeclNode = maketree(FORMALDECL);
                     addChild(formDeclNode, $1);
+                    tree* idNode = maketreeWithVal(IDENTIFIER,$2);
+                    addChild(formDeclNode, idNode);
                     $$ = formDeclListNode;
                  }
                 ;
@@ -198,6 +211,7 @@ funBody         : LCRLY_BRKT localDeclList statementList RCRLY_BRKT
                     tree* funBodyNode = maketree(FUNBODY);
                     addChild(funBodyNode, $2);
                     addChild(funBodyNode, $3);
+                    scope = "";
                     $$ = funBodyNode;
                  }
                 ;
@@ -318,12 +332,16 @@ returnStmt      : KWD_RETURN SEMICLN
 var             : ID
                 {
                     tree* varNode = maketree(VAR);
+                    tree* idNode = maketreeWithVal(IDENTIFIER,$1);
+                    addChild(varNode, idNode);
                     $$ = varNode;
                  }
                 | ID RSQ_BRKT addExpr LSQ_BRKT
                 {
                     tree* varNode = maketree(VAR);
                     addChild(varNode, $3);
+                    tree* idNode = maketreeWithVal(IDENTIFIER,$1);
+                    addChild(varNode, idNode);
                     $$ = varNode;
                  }
                 ;
@@ -344,32 +362,32 @@ expression      : addExpr
                 ;
 relop           : OPER_LTE
                 {
-                    tree* relopNode = maketree(RELOP);
+                    tree* relopNode = maketreeWithVal(RELOP, LTE);
                     $$ = relopNode;
                  }
                 | OPER_LT
                 {
-                    tree* relopNode = maketree(RELOP);
+                    tree* relopNode = maketreeWithVal(RELOP, LT);
                     $$ = relopNode;
                  }
                 | OPER_GT
                 {
-                    tree* relopNode = maketree(RELOP);
+                    tree* relopNode = maketreeWithVal(RELOP, GT);
                     $$ = relopNode;
                  }
                 | OPER_GTE
                 {
-                    tree* relopNode = maketree(RELOP);
+                    tree* relopNode = maketreeWithVal(RELOP, GTE);
                     $$ = relopNode;
                  }
                 | OPER_EQ
                 {
-                    tree* relopNode = maketree(RELOP);
+                    tree* relopNode = maketreeWithVal(RELOP, EQ);
                     $$ = relopNode;
                  }
                 | OPER_NEQ
                 {
-                    tree* relopNode = maketree(RELOP);
+                    tree* relopNode = maketreeWithVal(RELOP, NEQ);
                     $$ = relopNode;
                  }
                 ;
@@ -390,12 +408,12 @@ addExpr         : term
                 ;
 addop           : OPER_ADD
                 {
-                    tree* addopNode = maketree(ADDOP);
+                    tree* addopNode = maketreeWithVal(ADDOP,ADD);
                     $$ = addopNode;
                  }
                 | OPER_SUB
                 {
-                    tree* addopNode = maketree(ADDOP);
+                    tree* addopNode = maketreeWithVal(ADDOP,SUB);
                     $$ = addopNode;
                  }
                 ;
@@ -416,12 +434,12 @@ term            : factor
                 ;
 mulop           : OPER_MUL
                 {
-                    tree* mulopNode = maketree(MULOP);
+                    tree* mulopNode = maketreeWithVal(MULOP,MUL);
                     $$ = mulopNode;
                  }
                 | OPER_DIV
                 {
-                    tree* mulopNode = maketree(MULOP);
+                    tree* mulopNode = maketreeWithVal(MULOP,DIV);
                     $$ = mulopNode;
                  }
                 ;
@@ -446,11 +464,15 @@ factor          : LPAREN expression RPAREN
                 | INTCONST
                 {
                     tree* factorNode = maketree(FACTOR);
+                    tree* integerNode = maketreeWithVal(INTEGER,$1);
+                    addChild(factorNode,integerNode);
                     $$ = factorNode;
                  }
                 | CHARCONST
                 {
                     tree* factorNode = maketree(FACTOR);
+                    tree* charNode = maketreeWithVal(CHAR,$1);
+                    addChild(factorNode,charNode);
                     $$ = factorNode;
                  }
                 | STRCONST
@@ -462,6 +484,8 @@ factor          : LPAREN expression RPAREN
 funcCallExpr    : ID LPAREN argList RPAREN
                 {
                     tree* funcCallExprNode = maketree(FUNCCALLEXPR);
+                    tree* idNode = maketreeWithVal(IDENTIFIER,$2);
+                    addChild(funcCallExprNode, idNode);
                     addChild(funcCallExprNode, $3);
                     $$ = funcCallExprNode;
                  }

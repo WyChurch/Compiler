@@ -86,7 +86,7 @@ void printNode(tree *node)
     } 
     else if (node->nodeKind == 258) 
     { // Type specifier
-        const char *types[] = {"int", "float", "void"};
+        const char *types[] = {"int", "char", "void"};
         if (node->val >= 0 && node->val < 3) 
         {
             printf(", %s", types[node->val]);
