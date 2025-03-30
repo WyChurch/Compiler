@@ -53,17 +53,41 @@ void printIndent(int level)
     }
 }
 
-// Helper function to get a readable string for the node kind
-const char *getNodeKindName(int kind) 
-{
+//Get a readable string for the node kind
+const char *getNodeKindName(int kind) {
     switch (kind) {
-        case 257: return "Identifier";
-        case 258: return "TypeSpecifier";
-        case 259: return "IntLiteral";
-        case 260: return "AddExpr";
-        case 261: return "RelOpExpr";
-        case 262: return "FuncDecl";
-        // Add more nodeKind values based on your grammar
+        case ADDEXPR: return "AddExpr";
+        case ADDOP: return "AddOp";
+        case PROGRAM: return "Program";
+        case DECLLIST: return "DeclList";
+        case DECL: return "Decl";
+        case VARDECL: return "VarDecl";
+        case TYPESPEC: return "TypeSpecifier";
+        case FUNDECL: return "FuncDecl";
+        case FORMALDECLLIST: return "FormalDeclList";
+        case FORMALDECL: return "FormalDecl";
+        case FUNBODY: return "FunBody";
+        case LOCALDECLLIST: return "LocalDeclList";
+        case STATEMENTLIST: return "StatementList";
+        case STATEMENT: return "Statement";
+        case COMPOUNDSTMT: return "CompoundStmt";
+        case ASSIGNSTMT: return "AssignStmt";
+        case CONDSTMT: return "CondStmt";
+        case LOOPSTMT: return "LoopStmt";
+        case RETURNSTMT: return "ReturnStmt";
+        case EXPRESSION: return "Expression";
+        case RELOP: return "RelOp";
+        case TERM: return "Term";
+        case MULOP: return "MulOp";
+        case FACTOR: return "Factor";
+        case FUNCCALLEXPR: return "FuncCallExpr";
+        case ARGLIST: return "ArgList";
+        case INTEGER: return "IntLiteral";
+        case IDENTIFIER: return "Identifier";
+        case VAR: return "Var";
+        case ARRAYDECL: return "ArrayDecl";
+        case CHAR: return "CharLiteral";
+        case FUNCTYPENAME: return "FuncTypeName";
         default: return "Unknown";
     }
 }
