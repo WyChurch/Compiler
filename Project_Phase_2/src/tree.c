@@ -1,4 +1,5 @@
 #include <tree.h>
+#include "obj/y.tab.h"
 #include <strtab.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,7 +25,14 @@ tree *maketree(int kind)
     return node;
 }
 
-tree *maketreeWithVal(int kind, int val) 
+tree *maketreeWithVal(int kind, char *val2) 
+{
+    tree *newTree = maketree(kind);
+    newTree->val2 = val2;
+    return newTree;
+}
+
+tree *maketreeWithIntVal(int kind, int val) 
 {
     tree *node = maketree(kind);
     node->val = val;
@@ -32,6 +40,16 @@ tree *maketreeWithVal(int kind, int val)
 }
 
 void addChild(tree *parent, tree *child) 
+{
+    if (parent->numChildren >= MAXCHILDREN) 
+    {
+        fprintf(stderr, "Exceeded max children in addChild\n");
+        return;
+    }
+    parent->children[parent->numChildren++] = child;
+    child->parent = parent;
+}
+void addCharChild(tree *parent, char *child) 
 {
     if (parent->numChildren >= MAXCHILDREN) 
     {

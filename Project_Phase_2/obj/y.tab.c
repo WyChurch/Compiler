@@ -150,6 +150,9 @@
 #include<../src/tree.h>
 #include<../src/strtab.h>
 
+int yylex(void);
+int yyerror(const char *s);
+
 extern int yylineno;
 /* nodeTypes refer to different types of internal and external nodes that can be part of the abstract syntax tree.*/
 enum nodeTypes {PROGRAM, DECLLIST, DECL, VARDECL, TYPESPEC, FUNDECL,
@@ -187,14 +190,14 @@ char* scope = "";
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 27 "src/parser.y"
+#line 30 "src/parser.y"
 {
     int value;
     struct treenode *node;
     char *strval;
 }
 /* Line 193 of yacc.c.  */
-#line 198 "obj/y.tab.c"
+#line 201 "obj/y.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -207,7 +210,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 211 "obj/y.tab.c"
+#line 214 "obj/y.tab.c"
 
 #ifdef short
 # undef short
@@ -517,13 +520,13 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    83,    83,    91,    97,   106,   112,   119,   130,   140,
-     145,   150,   156,   168,   180,   186,   194,   203,   213,   223,
-     227,   236,   240,   248,   254,   260,   266,   272,   279,   286,
-     293,   300,   307,   316,   324,   329,   336,   343,   352,   358,
-     367,   372,   377,   382,   387,   392,   398,   404,   413,   418,
-     424,   430,   439,   444,   450,   456,   462,   468,   475,   482,
-     488,   496,   502,   508
+       0,    86,    86,    94,   100,   109,   115,   122,   133,   143,
+     148,   153,   159,   171,   183,   189,   197,   206,   216,   226,
+     230,   239,   243,   251,   257,   263,   269,   275,   282,   289,
+     296,   303,   310,   319,   327,   332,   339,   346,   355,   361,
+     370,   375,   380,   385,   390,   395,   401,   407,   416,   421,
+     427,   433,   442,   447,   453,   459,   465,   471,   478,   485,
+     491,   499,   505,   511
 };
 #endif
 
@@ -1507,7 +1510,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 84 "src/parser.y"
+#line 87 "src/parser.y"
     {
                     tree* progNode = maketree(PROGRAM);
                     addChild(progNode, (yyvsp[(1) - (1)].node));
@@ -1516,7 +1519,7 @@ yyreduce:
     break;
 
   case 3:
-#line 92 "src/parser.y"
+#line 95 "src/parser.y"
     {
                     tree* declListNode = maketree(DECLLIST);
                     addChild(declListNode, (yyvsp[(1) - (1)].node));
@@ -1525,7 +1528,7 @@ yyreduce:
     break;
 
   case 4:
-#line 98 "src/parser.y"
+#line 101 "src/parser.y"
     {
                     tree* declListNode = maketree(DECLLIST);
                     addChild(declListNode, (yyvsp[(1) - (2)].node));
@@ -1535,7 +1538,7 @@ yyreduce:
     break;
 
   case 5:
-#line 107 "src/parser.y"
+#line 110 "src/parser.y"
     {
                     tree* declNode = maketree(DECL);
                     addChild(declNode, (yyvsp[(1) - (1)].node));
@@ -1544,7 +1547,7 @@ yyreduce:
     break;
 
   case 6:
-#line 113 "src/parser.y"
+#line 116 "src/parser.y"
     {
                     tree* declNode = maketree(DECL);
                     addChild(declNode, (yyvsp[(1) - (1)].node));
@@ -1553,21 +1556,21 @@ yyreduce:
     break;
 
   case 7:
-#line 120 "src/parser.y"
+#line 123 "src/parser.y"
     {
                     ST_insert((yyvsp[(2) - (6)].strval),scope,(yyvsp[(1) - (6)].node)->val,ARRAY);
                     tree* varDeclNode = maketree(VARDECL);
                     addChild(varDeclNode, (yyvsp[(1) - (6)].node));
                     tree* idNode = maketreeWithVal(IDENTIFIER,(yyvsp[(2) - (6)].strval));
                     addChild(varDeclNode, idNode);
-                    tree* integerNode = maketreeWithVal(INTEGER,(yyvsp[(4) - (6)].value)); 
+                    tree* integerNode = maketreeWithIntVal(INTEGER,(yyvsp[(4) - (6)].value)); 
                     addChild(varDeclNode, integerNode);
                     (yyval.node) = varDeclNode;
                  }
     break;
 
   case 8:
-#line 131 "src/parser.y"
+#line 134 "src/parser.y"
     {
                     ST_insert((yyvsp[(2) - (3)].strval),scope,(yyvsp[(1) - (3)].node)->val,SCALAR);
                     tree* varDeclNode = maketree(VARDECL);
@@ -1579,33 +1582,33 @@ yyreduce:
     break;
 
   case 9:
-#line 141 "src/parser.y"
+#line 144 "src/parser.y"
     {
-                    tree* typeSpecNode = maketreeWithVal(TYPESPEC, INT_TYPE);
+                    tree* typeSpecNode = maketreeWithIntVal(TYPESPEC, INT_TYPE);
                     (yyval.node) = typeSpecNode;
                  }
     break;
 
   case 10:
-#line 146 "src/parser.y"
+#line 149 "src/parser.y"
     {
-                    tree* typeSpecNode = maketreeWithVal(TYPESPEC, CHAR_TYPE);
+                    tree* typeSpecNode = maketreeWithIntVal(TYPESPEC, CHAR_TYPE);
                     (yyval.node) = typeSpecNode;
                  }
     break;
 
   case 11:
-#line 151 "src/parser.y"
+#line 154 "src/parser.y"
     {
-                    tree* typeSpecNode = maketreeWithVal(TYPESPEC, VOID_TYPE);
+                    tree* typeSpecNode = maketreeWithIntVal(TYPESPEC, VOID_TYPE);
                     (yyval.node) = typeSpecNode;
                  }
     break;
 
   case 12:
-#line 157 "src/parser.y"
+#line 160 "src/parser.y"
     {
-                    ST_insert((yyvsp[(2) - (6)].strval),scope,(yyvsp[(1) - (6)].node)->val,FUNCTION)
+                    ST_insert((yyvsp[(2) - (6)].strval),scope,(yyvsp[(1) - (6)].node)->val,FUNCTION);
                     scope = (yyvsp[(2) - (6)].strval);
                     tree* funDeclNode = maketree(FUNDECL);
                     addChild(funDeclNode, (yyvsp[(1) - (6)].node));
@@ -1618,9 +1621,9 @@ yyreduce:
     break;
 
   case 13:
-#line 169 "src/parser.y"
+#line 172 "src/parser.y"
     {
-                    ST_insert((yyvsp[(2) - (5)].strval),scope,(yyvsp[(1) - (5)].node)->val,FUNCTION)
+                    ST_insert((yyvsp[(2) - (5)].strval),scope,(yyvsp[(1) - (5)].node)->val,FUNCTION);
                     scope = (yyvsp[(2) - (5)].strval);
                     tree* funDeclNode = maketree(FUNDECL);
                     addChild(funDeclNode, (yyvsp[(1) - (5)].node));
@@ -1632,50 +1635,50 @@ yyreduce:
     break;
 
   case 14:
-#line 181 "src/parser.y"
+#line 184 "src/parser.y"
     {
-                    tree* formDeclListNode = maketree(FORMALDECLLIST);
-                    addChild(formDeclListNode, (yyvsp[(1) - (1)].node));
-                    (yyval.node) = formDeclListNode;
+                    tree* formDeclNode = maketree(FORMALDECLLIST);
+                    addChild(formDeclNode, (yyvsp[(1) - (1)].node));
+                    (yyval.node) = formDeclNode;
                  }
     break;
 
   case 15:
-#line 187 "src/parser.y"
+#line 190 "src/parser.y"
     {
-                    tree* formDeclListNode = maketree(FORMALDECLLIST);
-                    addChild(formDeclListNode, (yyvsp[(1) - (3)].node));
-                    addChild(formDeclListNode, (yyvsp[(3) - (3)].node));
-                    (yyval.node) = formDeclListNode;
+                    tree* formDeclNode = maketree(FORMALDECLLIST);
+                    addChild(formDeclNode, (yyvsp[(1) - (3)].node));
+                    addChild(formDeclNode, (yyvsp[(3) - (3)].node));
+                    (yyval.node) = formDeclNode;
                  }
     break;
 
   case 16:
-#line 195 "src/parser.y"
+#line 198 "src/parser.y"
     {
                     ST_insert((yyvsp[(2) - (2)].strval),scope,(yyvsp[(1) - (2)].node)->val,SCALAR);
                     tree* formDeclNode = maketree(FORMALDECL);
                     addChild(formDeclNode, (yyvsp[(1) - (2)].node));
                     tree* idNode = maketreeWithVal(IDENTIFIER,(yyvsp[(2) - (2)].strval));
                     addChild(formDeclNode, idNode);
-                    (yyval.node) = formDeclListNode;
+                    (yyval.node) = formDeclNode;
                  }
     break;
 
   case 17:
-#line 204 "src/parser.y"
+#line 207 "src/parser.y"
     {
                     ST_insert((yyvsp[(2) - (4)].strval),scope,(yyvsp[(1) - (4)].node)->val,ARRAY);
                     tree* formDeclNode = maketree(FORMALDECL);
                     addChild(formDeclNode, (yyvsp[(1) - (4)].node));
                     tree* idNode = maketreeWithVal(IDENTIFIER,(yyvsp[(2) - (4)].strval));
                     addChild(formDeclNode, idNode);
-                    (yyval.node) = formDeclListNode;
+                    (yyval.node) = formDeclNode;
                  }
     break;
 
   case 18:
-#line 214 "src/parser.y"
+#line 217 "src/parser.y"
     {
                     tree* funBodyNode = maketree(FUNBODY);
                     addChild(funBodyNode, (yyvsp[(2) - (4)].node));
@@ -1686,7 +1689,7 @@ yyreduce:
     break;
 
   case 19:
-#line 223 "src/parser.y"
+#line 226 "src/parser.y"
     {
                     tree* localDeclListNode = maketree(LOCALDECLLIST);
                     (yyval.node) = localDeclListNode;
@@ -1694,7 +1697,7 @@ yyreduce:
     break;
 
   case 20:
-#line 228 "src/parser.y"
+#line 231 "src/parser.y"
     {
                     tree* localDeclListNode = maketree(LOCALDECLLIST);
                     addChild(localDeclListNode,(yyvsp[(1) - (2)].node));
@@ -1704,7 +1707,7 @@ yyreduce:
     break;
 
   case 21:
-#line 236 "src/parser.y"
+#line 239 "src/parser.y"
     {
                     tree* statementListNode = maketree(STATEMENTLIST);
                     (yyval.node) = statementListNode;
@@ -1712,7 +1715,7 @@ yyreduce:
     break;
 
   case 22:
-#line 241 "src/parser.y"
+#line 244 "src/parser.y"
     {
                     tree* statementListNode = maketree(STATEMENTLIST);
                     addChild(statementListNode, (yyvsp[(1) - (2)].node));
@@ -1722,7 +1725,7 @@ yyreduce:
     break;
 
   case 23:
-#line 249 "src/parser.y"
+#line 252 "src/parser.y"
     {
                     tree* statementNode = maketree(STATEMENT);
                     addChild(statementNode, (yyvsp[(1) - (1)].node));
@@ -1731,7 +1734,7 @@ yyreduce:
     break;
 
   case 24:
-#line 255 "src/parser.y"
+#line 258 "src/parser.y"
     {
                     tree* statementNode = maketree(STATEMENT);
                     addChild(statementNode, (yyvsp[(1) - (1)].node));
@@ -1740,7 +1743,7 @@ yyreduce:
     break;
 
   case 25:
-#line 261 "src/parser.y"
+#line 264 "src/parser.y"
     {
                     tree* statementNode = maketree(STATEMENT);
                     addChild(statementNode, (yyvsp[(1) - (1)].node));
@@ -1749,7 +1752,7 @@ yyreduce:
     break;
 
   case 26:
-#line 267 "src/parser.y"
+#line 270 "src/parser.y"
     {
                     tree* statementNode = maketree(STATEMENT);
                     addChild(statementNode, (yyvsp[(1) - (1)].node));
@@ -1758,7 +1761,7 @@ yyreduce:
     break;
 
   case 27:
-#line 273 "src/parser.y"
+#line 276 "src/parser.y"
     {
                     tree* statementNode = maketree(STATEMENT);
                     addChild(statementNode, (yyvsp[(1) - (1)].node));
@@ -1767,16 +1770,16 @@ yyreduce:
     break;
 
   case 28:
-#line 280 "src/parser.y"
+#line 283 "src/parser.y"
     {
                     tree* compStmtNode = maketree(COMPOUNDSTMT);
-                    addChild(compStmtNode, (yyvsp[(1) - (3)].strval));
+                    addCharChild(compStmtNode, (yyvsp[(1) - (3)].strval));
                     (yyval.node) = compStmtNode;
                  }
     break;
 
   case 29:
-#line 287 "src/parser.y"
+#line 290 "src/parser.y"
     {
                     tree* assignStmtNode = maketree(ASSIGNSTMT);
                     addChild(assignStmtNode, (yyvsp[(1) - (4)].node));
@@ -1786,7 +1789,7 @@ yyreduce:
     break;
 
   case 30:
-#line 294 "src/parser.y"
+#line 297 "src/parser.y"
     {
                     tree* assignStmtNode = maketree(ASSIGNSTMT);
                     addChild(assignStmtNode, (yyvsp[(1) - (2)].node));
@@ -1795,7 +1798,7 @@ yyreduce:
     break;
 
   case 31:
-#line 301 "src/parser.y"
+#line 304 "src/parser.y"
     {
                     tree* condStmtNode = maketree(CONDSTMT);
                     addChild(condStmtNode, (yyvsp[(3) - (5)].node));
@@ -1805,7 +1808,7 @@ yyreduce:
     break;
 
   case 32:
-#line 308 "src/parser.y"
+#line 311 "src/parser.y"
     {
                     tree* condStmtNode = maketree(CONDSTMT);
                     addChild(condStmtNode, (yyvsp[(3) - (7)].node));
@@ -1816,7 +1819,7 @@ yyreduce:
     break;
 
   case 33:
-#line 317 "src/parser.y"
+#line 320 "src/parser.y"
     {
                     tree* loopStmtNode = maketree(LOOPSTMT);
                     addChild(loopStmtNode, (yyvsp[(3) - (5)].node));
@@ -1826,7 +1829,7 @@ yyreduce:
     break;
 
   case 34:
-#line 325 "src/parser.y"
+#line 328 "src/parser.y"
     {
                     tree* returnStmtNode = maketree(RETURNSTMT);
                     (yyval.node) = returnStmtNode;
@@ -1834,7 +1837,7 @@ yyreduce:
     break;
 
   case 35:
-#line 330 "src/parser.y"
+#line 333 "src/parser.y"
     {
                     tree* returnStmtNode = maketree(RETURNSTMT);
                     addChild(returnStmtNode, (yyvsp[(2) - (3)].node));
@@ -1843,7 +1846,7 @@ yyreduce:
     break;
 
   case 36:
-#line 337 "src/parser.y"
+#line 340 "src/parser.y"
     {
                     tree* varNode = maketree(VAR);
                     tree* idNode = maketreeWithVal(IDENTIFIER,(yyvsp[(1) - (1)].strval));
@@ -1853,7 +1856,7 @@ yyreduce:
     break;
 
   case 37:
-#line 344 "src/parser.y"
+#line 347 "src/parser.y"
     {
                     tree* varNode = maketree(VAR);
                     addChild(varNode, (yyvsp[(3) - (4)].node));
@@ -1864,7 +1867,7 @@ yyreduce:
     break;
 
   case 38:
-#line 353 "src/parser.y"
+#line 356 "src/parser.y"
     {
                     tree* expressionNode = maketree(EXPRESSION);
                     addChild(expressionNode, (yyvsp[(1) - (1)].node));
@@ -1873,7 +1876,7 @@ yyreduce:
     break;
 
   case 39:
-#line 359 "src/parser.y"
+#line 362 "src/parser.y"
     {
                     tree* expressionNode = maketree(EXPRESSION);
                     addChild(expressionNode, (yyvsp[(1) - (3)].node));
@@ -1884,55 +1887,55 @@ yyreduce:
     break;
 
   case 40:
-#line 368 "src/parser.y"
+#line 371 "src/parser.y"
     {
-                    tree* relopNode = maketreeWithVal(RELOP, LTE);
+                    tree* relopNode = maketreeWithIntVal(RELOP, LTE);
                     (yyval.node) = relopNode;
                  }
     break;
 
   case 41:
-#line 373 "src/parser.y"
+#line 376 "src/parser.y"
     {
-                    tree* relopNode = maketreeWithVal(RELOP, LT);
+                    tree* relopNode = maketreeWithIntVal(RELOP, LT);
                     (yyval.node) = relopNode;
                  }
     break;
 
   case 42:
-#line 378 "src/parser.y"
+#line 381 "src/parser.y"
     {
-                    tree* relopNode = maketreeWithVal(RELOP, GT);
+                    tree* relopNode = maketreeWithIntVal(RELOP, GT);
                     (yyval.node) = relopNode;
                  }
     break;
 
   case 43:
-#line 383 "src/parser.y"
+#line 386 "src/parser.y"
     {
-                    tree* relopNode = maketreeWithVal(RELOP, GTE);
+                    tree* relopNode = maketreeWithIntVal(RELOP, GTE);
                     (yyval.node) = relopNode;
                  }
     break;
 
   case 44:
-#line 388 "src/parser.y"
+#line 391 "src/parser.y"
     {
-                    tree* relopNode = maketreeWithVal(RELOP, EQ);
+                    tree* relopNode = maketreeWithIntVal(RELOP, EQ);
                     (yyval.node) = relopNode;
                  }
     break;
 
   case 45:
-#line 393 "src/parser.y"
+#line 396 "src/parser.y"
     {
-                    tree* relopNode = maketreeWithVal(RELOP, NEQ);
+                    tree* relopNode = maketreeWithIntVal(RELOP, NEQ);
                     (yyval.node) = relopNode;
                  }
     break;
 
   case 46:
-#line 399 "src/parser.y"
+#line 402 "src/parser.y"
     {
                     tree* addExprNode = maketree(ADDEXPR);
                     addChild(addExprNode, (yyvsp[(1) - (1)].node));
@@ -1941,7 +1944,7 @@ yyreduce:
     break;
 
   case 47:
-#line 405 "src/parser.y"
+#line 408 "src/parser.y"
     {
                     tree* addExprNode = maketree(ADDEXPR);
                     addChild(addExprNode, (yyvsp[(1) - (3)].node));
@@ -1952,23 +1955,23 @@ yyreduce:
     break;
 
   case 48:
-#line 414 "src/parser.y"
+#line 417 "src/parser.y"
     {
-                    tree* addopNode = maketreeWithVal(ADDOP,ADD);
+                    tree* addopNode = maketreeWithIntVal(ADDOP,ADD);
                     (yyval.node) = addopNode;
                  }
     break;
 
   case 49:
-#line 419 "src/parser.y"
+#line 422 "src/parser.y"
     {
-                    tree* addopNode = maketreeWithVal(ADDOP,SUB);
+                    tree* addopNode = maketreeWithIntVal(ADDOP,SUB);
                     (yyval.node) = addopNode;
                  }
     break;
 
   case 50:
-#line 425 "src/parser.y"
+#line 428 "src/parser.y"
     {
                     tree* termNode = maketree(TERM);
                     addChild(termNode, (yyvsp[(1) - (1)].node));
@@ -1977,7 +1980,7 @@ yyreduce:
     break;
 
   case 51:
-#line 431 "src/parser.y"
+#line 434 "src/parser.y"
     {
                     tree* termNode = maketree(TERM);
                     addChild(termNode, (yyvsp[(1) - (3)].node));
@@ -1988,32 +1991,32 @@ yyreduce:
     break;
 
   case 52:
-#line 440 "src/parser.y"
+#line 443 "src/parser.y"
     {
-                    tree* mulopNode = maketreeWithVal(MULOP,MUL);
+                    tree* mulopNode = maketreeWithIntVal(MULOP,MUL);
                     (yyval.node) = mulopNode;
                  }
     break;
 
   case 53:
-#line 445 "src/parser.y"
+#line 448 "src/parser.y"
     {
-                    tree* mulopNode = maketreeWithVal(MULOP,DIV);
+                    tree* mulopNode = maketreeWithIntVal(MULOP,DIV);
                     (yyval.node) = mulopNode;
                  }
     break;
 
   case 54:
-#line 451 "src/parser.y"
+#line 454 "src/parser.y"
     {
                     tree* factorNode = maketree(FACTOR);
-                    addChild(factorNode, (yyvsp[(1) - (3)].strval));
+                    addCharChild(factorNode, (yyvsp[(1) - (3)].strval));
                     (yyval.node) = factorNode;
                  }
     break;
 
   case 55:
-#line 457 "src/parser.y"
+#line 460 "src/parser.y"
     {
                     tree* factorNode = maketree(FACTOR);
                     addChild(factorNode, (yyvsp[(1) - (1)].node));
@@ -2022,7 +2025,7 @@ yyreduce:
     break;
 
   case 56:
-#line 463 "src/parser.y"
+#line 466 "src/parser.y"
     {
                     tree* factorNode = maketree(FACTOR);
                     addChild(factorNode, (yyvsp[(1) - (1)].node));
@@ -2031,17 +2034,17 @@ yyreduce:
     break;
 
   case 57:
-#line 469 "src/parser.y"
+#line 472 "src/parser.y"
     {
                     tree* factorNode = maketree(FACTOR);
-                    tree* integerNode = maketreeWithVal(INTEGER,(yyvsp[(1) - (1)].value));
+                    tree* integerNode = maketreeWithIntVal(INTEGER,(yyvsp[(1) - (1)].value));
                     addChild(factorNode,integerNode);
                     (yyval.node) = factorNode;
                  }
     break;
 
   case 58:
-#line 476 "src/parser.y"
+#line 479 "src/parser.y"
     {
                     tree* factorNode = maketree(FACTOR);
                     tree* charNode = maketreeWithVal(CHAR,(yyvsp[(1) - (1)].strval));
@@ -2051,7 +2054,7 @@ yyreduce:
     break;
 
   case 59:
-#line 483 "src/parser.y"
+#line 486 "src/parser.y"
     {
                     tree* factorNode = maketree(FACTOR);
                     (yyval.node) = factorNode;
@@ -2059,7 +2062,7 @@ yyreduce:
     break;
 
   case 60:
-#line 489 "src/parser.y"
+#line 492 "src/parser.y"
     {
                     tree* funcCallExprNode = maketree(FUNCCALLEXPR);
                     tree* idNode = maketreeWithVal(IDENTIFIER,(yyvsp[(2) - (4)].strval));
@@ -2070,7 +2073,7 @@ yyreduce:
     break;
 
   case 61:
-#line 497 "src/parser.y"
+#line 500 "src/parser.y"
     {
                     tree* funcCallExprNode = maketree(FUNCCALLEXPR);
                     (yyval.node) = funcCallExprNode;
@@ -2078,7 +2081,7 @@ yyreduce:
     break;
 
   case 62:
-#line 503 "src/parser.y"
+#line 506 "src/parser.y"
     {
                     tree* argListNode = maketree(ARGLIST);
                     addChild(argListNode, (yyvsp[(1) - (1)].node));
@@ -2087,7 +2090,7 @@ yyreduce:
     break;
 
   case 63:
-#line 509 "src/parser.y"
+#line 512 "src/parser.y"
     {
                     tree* argListNode = maketree(ARGLIST);
                     addChild(argListNode, (yyvsp[(1) - (3)].node));
@@ -2098,7 +2101,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 2102 "obj/y.tab.c"
+#line 2105 "obj/y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2312,7 +2315,7 @@ yyreturn:
 }
 
 
-#line 517 "src/parser.y"
+#line 520 "src/parser.y"
 
 
 int yywarning(char * msg){
@@ -2320,7 +2323,7 @@ int yywarning(char * msg){
     return 0;
 }
 
-int yyerror(char * msg){
+int yyerror(const char * msg){
     printf("error: line %d: %s\n", yylineno, msg);
     return 0;
 }
