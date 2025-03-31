@@ -84,11 +84,14 @@ In the Folder of Prohect_Phase_2 run this command:
 _______________________________________________________________________________________________________________ 
 
 ## Dates:
-    Repository Last Updated: 3/31/2025
+Repository Last Updated: 
+    3/31/2025
     
-    Phase 1 Completion (Scanner): 2/25/2025
+Phase 1 Completion (Scanner): 
+    2/25/2025
 
-    Phase 2 Completion: 3/31/2025
+Phase 2 Completion: 
+    3/31/2025
 
 _______________________________________________________________________________________________________________ 
 
