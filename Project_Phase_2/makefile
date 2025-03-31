@@ -42,3 +42,4 @@ clean:
 
 test: obj/mcc
 	@python ./test/testParser.py
+
