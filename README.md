@@ -65,7 +65,7 @@ ________________________________________________________________________________
 
 
 ## How to run Scanner:
-In the folder of Compiler-Project run this command:
+In the folder of Project_Phase_1 run this command:
 
     ./obj/scanner < path/of/mC/file.mc
     
@@ -75,6 +75,17 @@ Example (From Phase 1):
 
 _______________________________________________________________________________________________________________ 
 
+
+## How to run Phase 2
+In the Folder of Prohect_Phase_2 run this command:
+
+    ./obj/mcc < TestCases/"FileName".mC
+
+_______________________________________________________________________________________________________________ 
+
 ## Dates:
-    Repository Last Updated: 2/26/2025
+    Repository Last Updated: 3/31/2025
+    
     Phase 1 Completion (Scanner): 2/25/2025
+
+    Phase 2 Completion: 3/31/2025
