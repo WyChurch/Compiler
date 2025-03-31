@@ -95,8 +95,8 @@ ________________________________________________________________________________
 
 ## Personal note:
 
-    Move run_test.sh to Project_Phase_2 folder and run this command to test all cases:
+Move run_test.sh to Project_Phase_2 folder and run this command to test all cases:
 
         ./run_tests.sh
 
-    Sorry but this script is for personal use only
+Sorry but this script is for personal use only
