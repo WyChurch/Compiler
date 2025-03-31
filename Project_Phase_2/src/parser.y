@@ -56,6 +56,7 @@ char* scope = "";
 %token <strval> OPER_GTE
 %token <strval> OPER_GT
 %token <strval> OPER_NEQ
+%token <strval> OPER_ASGN
 
 %token <strval> LSQ_BRKT
 %token <strval> RSQ_BRKT
@@ -65,6 +66,9 @@ char* scope = "";
 %token <strval> RPAREN
 %token <strval> COMMA
 %token <strval> SEMICLN
+
+%token <strval> ERROR
+%token <strval> ILLEGAL_TOKEN
 
 /* TODO: Declate non-terminal symbols as of type node. Provided below is one example. node is defined as 'struct treenode *node' in the above union data structure. This declaration indicates to parser that these non-terminal variables will be implemented using a 'treenode *' type data structure. Hence, the circles you draw when drawing a parse tree, the following lines are telling yacc that these will eventually become circles in an AST. This is one of the connections between the AST you draw by hand and how yacc implements code to concretize that. We provide with two examples: program and declList from the grammar. Make sure to add the rest.  */
 
@@ -167,7 +171,7 @@ funDecl         : typeSpecifier ID LPAREN formalDeclList RPAREN funBody
                     scope = $2;
                     tree* funDeclNode = maketree(FUNDECL);
                     addChild(funDeclNode, $1);
-                    addChild(funDeclNode, $6);
+                    addChild(funDeclNode, $5);
                     tree* idNode = maketreeWithVal(IDENTIFIER,$2);
                     addChild(funDeclNode, idNode);
                     $$ = funDeclNode;
