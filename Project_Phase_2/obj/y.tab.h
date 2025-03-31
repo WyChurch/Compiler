@@ -116,7 +116,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 30 "src/parser.y"
+#line 33 "src/parser.y"
 {
     int value;
     struct treenode *node;

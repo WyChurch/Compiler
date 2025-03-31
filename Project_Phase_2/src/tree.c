@@ -1,9 +1,9 @@
 #include <tree.h>
-#include "obj/y.tab.h"
 #include <strtab.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 
 tree *maketree(int kind) 
 {
@@ -49,7 +49,7 @@ void addChild(tree *parent, tree *child)
     parent->children[parent->numChildren++] = child;
     child->parent = parent;
 }
-void addCharChild(tree *parent, char *child) 
+void addCharChild(tree *parent, tree *child) 
 {
     if (parent->numChildren >= MAXCHILDREN) 
     {
@@ -120,7 +120,7 @@ void printNode(tree *node)
     // Print extra info for specific node kinds
     if (node->nodeKind == 257) 
     { // Identifier
-        printf(", %s", strTable[node->val]);
+        printf(", %s", strTable[node->val].name);
     } 
     else if (node->nodeKind == 259) 
     { // Int literal

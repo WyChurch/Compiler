@@ -1,15 +1,17 @@
 %{
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<../src/tree.h>
-#include<../src/strtab.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <tree.h>
+#include <strtab.h>
+
 
 int yylex(void);
 int yyerror(const char *s);
 
 extern int yylineno;
 /* nodeTypes refer to different types of internal and external nodes that can be part of the abstract syntax tree.*/
+/*
 enum nodeTypes {PROGRAM, DECLLIST, DECL, VARDECL, TYPESPEC, FUNDECL,
                 FORMALDECLLIST, FORMALDECL, FUNBODY, LOCALDECLLIST,
                 STATEMENTLIST, STATEMENT, COMPOUNDSTMT, ASSIGNSTMT,
@@ -17,6 +19,7 @@ enum nodeTypes {PROGRAM, DECLLIST, DECL, VARDECL, TYPESPEC, FUNDECL,
                 ADDEXPR, ADDOP, TERM, MULOP, FACTOR, FUNCCALLEXPR,
                 ARGLIST, INTEGER, IDENTIFIER, VAR, ARRAYDECL, CHAR,
                 FUNCTYPENAME};
+*/
 
 enum opType {ADD, SUB, MUL, DIV, LT, LTE, EQ, GTE, GT, NEQ};
 
@@ -282,7 +285,9 @@ statement       : compoundStmt
 compoundStmt    : LCRLY_BRKT statementList RCRLY_BRKT
                 {
                     tree* compStmtNode = maketree(COMPOUNDSTMT);
-                    addCharChild(compStmtNode, $1);
+                    tree *idNode = maketreeWithVal(IDENTIFIER, (yyvsp[(1) - (3)].strval));
+                    addCharChild(compStmtNode, idNode);
+                    //addCharChild(compStmtNode, $1);
                     $$ = compStmtNode;
                  }
                 ;
@@ -453,7 +458,9 @@ mulop           : OPER_MUL
 factor          : LPAREN expression RPAREN
                 {
                     tree* factorNode = maketree(FACTOR);
-                    addCharChild(factorNode, $1);
+                    tree *idNode = maketreeWithVal(IDENTIFIER, (yyvsp[(1) - (3)].strval));
+                    addCharChild(factorNode, idNode);
+                    //addCharChild(factorNode, $1);
                     $$ = factorNode;
                  }
                 | var

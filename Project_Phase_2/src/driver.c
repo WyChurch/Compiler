@@ -4,6 +4,8 @@
 #include<../src/tree.h>
 #include<../src/strtab.h>
 
+int yyparse(void);
+
 int main() {
     if (!yyparse()){
         printAst(ast, 1);
