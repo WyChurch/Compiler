@@ -76,7 +76,7 @@ Example (From Phase 1):
 _______________________________________________________________________________________________________________ 
 
 
-## How to run Phase 2
+## How to run Phase 2:
 In the Folder of Prohect_Phase_2 run this command:
 
     ./obj/mcc < TestCases/"FileName".mC
@@ -89,3 +89,14 @@ ________________________________________________________________________________
     Phase 1 Completion (Scanner): 2/25/2025
 
     Phase 2 Completion: 3/31/2025
+
+_______________________________________________________________________________________________________________ 
+
+
+## Personal note:
+
+    Move run_test.sh to Project_Phase_2 folder and run this command to test all cases:
+
+        ./run_tests.sh
+
+    Sorry but this script is for personal use only
