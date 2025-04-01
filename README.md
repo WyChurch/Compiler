@@ -92,7 +92,7 @@ Phase 1 Completion (Scanner):
 
     2/25/2025
 
-Phase 2 Completion: 
+Phase 2 Completion (Parser): 
 
     3/31/2025
 
