@@ -1,0 +1,11 @@
+Section 1.
+    Julie Hargrave, Wyatt Churchman, Samantha Nava for CS4318
+
+Section 2. 
+    Julie - main contributor to parser.y; also did minor debugging for tree.c
+    Wyatt - did most of the debugging and organizing; crutial in making everything work together
+    Sam - main contributor to functions in tree.c and strtab.c 
+
+Section 3.
+    To test on our own, we mainly used the provided tests. We also tested the error and warning the parser is supposed to produce by 
+    purposefully changing some of the provided files to include syntax errors and undeclared symbols.
