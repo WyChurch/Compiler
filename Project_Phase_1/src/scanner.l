@@ -156,6 +156,31 @@ int processString(){
 	char* str = yytext;
 	int i = 0, j = 0;
 
+	if (str[1] == '\\'){
+        if (str[2] == '\''){
+            processedStr[j++] = '\'';
+        }
+        else if (yytext[2] == 'n'){
+            processedStr[j++] = '\n';
+        }
+        else if (yytext[2] == 't'){
+            processedStr[j++] = '\t';
+        }
+        else if (yytext[2] == '\\'){
+            processedStr[j++] = '\\';
+        }
+        else{
+            yyerror = "Unrecognized escape character in String";
+            return ERROR;
+        }
+    }
+    else{
+        // If the character isn't escaped, add it to our temp string.
+        processedStr[j++] = str[1];
+    }
+    return STRCONST;
+
+	/*
 	while(str[i] != '\0') {
 
 		if(str[i] == '\\'){				//Handle escape sequences
@@ -192,6 +217,8 @@ int processString(){
 	}
 
 	processedStr[j] = '\0';
-	return STRCONST;										//Return string token
+	return STRCONST;										//Return string token */
+
+	
 
 }
