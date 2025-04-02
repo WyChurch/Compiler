@@ -22,8 +22,8 @@ integerlead0    [0][0-9]+
 integer         [1-9][0-9]*
 
 newline   		\n
-whitespace      [ \t\r\f\v]+
-character       \'(\\.|[^'\\])\'
+whitespace      [ \t]+
+character       \'([^\']|\\[\\nt\'])\'
 
 /* String can contain any characters between the double quotes other than a newline or unescaped doublequotes.*/
 string       	\"([^\"\n]|\\.)*\"
@@ -34,12 +34,12 @@ multlnstring 	\"([^\"\n]|\\.)*\n([^\"\n]|\\.)*\"
 /* If the end quote is found, one of the two regexes above will be matched. Otherwise, the string is unterminated.*/
 untermstring 	\"([^\"\n]|\\.)*
 
-comment         "//.*|/\*[\s\S]*?\*/"
-multlncomment   "/\\*([^*]|\\*+[^*/])*\\*+/"
-untermcomment   "/\\*([^*]|\\*+[^*/])*"
+comment         \/\*\/?([^\n\/]|[^\*]\/)*\*\/
+multlncomment   \/\*\/?([^\/]|[^\*]\/)*\n([^\/]|[^\*]\/)*\*\/
+untermcomment   \/\*\/?([^\/\n]|[^\*]\/)*
 
 identifier      [a-zA-Z_][a-zA-Z0-9]*
-illidentifier   [0-9][a-zA-Z0-9_]*
+illidentifier   [0-9]+[a-zA-Z][a-zA-Z0-9]*
 
 yylineno = 1;
 
@@ -78,45 +78,34 @@ yylineno = 1;
 "struct"   { updateCol(); return KWD_STRUCT; }
 	
  /* Operators */;
-"+"		{ updateCol(); return OPER_ADD; }
-"-"		{ updateCol(); return OPER_SUB; }
-"*"		{ updateCol(); return OPER_MUL; }
-"/"		{ updateCol(); return OPER_DIV; }
-"\%"	{ updateCol(); return OPER_MOD; }
-"<"		{ updateCol(); return OPER_LT; }
-">"		{ updateCol(); return OPER_GT; }
-"<="	{ updateCol(); return OPER_LTE; }
-">="	{ updateCol(); return OPER_GTE; }
-"=="	{ updateCol(); return OPER_EQ; }
-"!="	{ updateCol(); return OPER_NEQ; }
-"="		{ updateCol(); return OPER_ASGN; }
-"@"		{ updateCol(); return OPER_AT; }
-"++"	{ updateCol(); return OPER_INC; }
-"--"	{ updateCol(); return OPER_DEC; }
-"&&"	{ updateCol(); return OPER_AND; }
-"||"	{ updateCol(); return OPER_OR; }
-"!"		{ updateCol(); return OPER_NOT; }
-"["		{ updateCol(); return LSQ_BRKT; }
-"]" 	{ updateCol(); return RSQ_BRKT; }
-"{"		{ updateCol(); return LCRLY_BRKT; }
-"}"		{ updateCol(); return RCRLY_BRKT; }
-"("		{ updateCol(); return LPAREN; }
-")"		{ updateCol(); return RPAREN; }
-","		{ updateCol(); return COMMA; }
-";"		{ updateCol(); return SEMICLN; }
+\+		{ updateCol(); return OPER_ADD; }
+\-		{ updateCol(); return OPER_SUB; }
+\*		{ updateCol(); return OPER_MUL; }
+\/		{ updateCol(); return OPER_DIV; }
+\%		{ updateCol(); return OPER_MOD; }
+\<		{ updateCol(); return OPER_LT; }
+\>		{ updateCol(); return OPER_GT; }
+\<=		{ updateCol(); return OPER_LTE; }
+\>=		{ updateCol(); return OPER_GTE; }
+==		{ updateCol(); return OPER_EQ; }
+!=		{ updateCol(); return OPER_NEQ; }
+=		{ updateCol(); return OPER_ASGN; }
+
 
  /* Delimiter */
-"{"		{ updateCol(); return LCRLY_BRKT; }
-"}"		{ updateCol(); return RCRLY_BRKT; }
-"("		{ updateCol(); return LPAREN; }
-")"		{ updateCol(); return RPAREN; }
-","		{ updateCol(); return COMMA; }
-";"		{ updateCol(); return SEMICLN; }
+\[		{ updateCol(); return LSQ_BRKT; }
+\] 		{ updateCol(); return RSQ_BRKT; }
+\{		{ updateCol(); return LCRLY_BRKT; }
+\}		{ updateCol(); return RCRLY_BRKT; }
+\(		{ updateCol(); return LPAREN; }
+\)		{ updateCol(); return RPAREN; }
+,		{ updateCol(); return COMMA; }
+;		{ updateCol(); return SEMICLN; }
 
  /* Other */;
-{newline}		{ scanlineno++; yycol = 1; countLines(); }       	//TODO (done), this resets the column count when it hit a newline or \n
+{newline}		{ scancol = 1; scanlineno++; yylineno = scanlineno; }       	//TODO (done), this resets the column count when it hit a newline or \n
 {whitespace}    { updateCol(); }								//TODO (done) Ignores whitspace
-.               { printf("Unmatched input: %s\n", yytext); return ERROR; }
+.               { return ILLEGAL_TOKEN; }
 
  /* Constants */;
 {integerlead0}  { updateCol(); yyerror = "There should be no leading zeros"; return ERROR; } //TODO: "Integers may not have leading zeros" (done)
@@ -142,14 +131,20 @@ yylineno = 1;
 void updateCol(){
 	//TODO: Keep track of column number (done)
 
-	yycol += yyleng; // Increase column count by the length of the matched token
+	yycol = scancol;
+	scancol += yyleng; // Increase column count by the length of the matched token
 
 }
 
 void countLines(){
 	//TODO: Count the number of lines (done)
 
-	yylineno++;
+	yylineno = scanlineno;
+    for (int i=0; i<yyleng; i++){
+        if (yytext[i] == '\n')
+            scanlineno++;
+    }
+	
 
 }
 

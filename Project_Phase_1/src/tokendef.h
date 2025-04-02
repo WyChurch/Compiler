@@ -67,3 +67,4 @@
 
 /* error */
 #define ERROR           308
+#define ILLEGAL_TOKEN   309
