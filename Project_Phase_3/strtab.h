@@ -11,7 +11,7 @@ typedef struct param{
     struct param* next;
 } param;
 
-typedef struct strEntry{
+typedef struct symEntry{
     char* id;
     char* scope;
     int   data_type;
