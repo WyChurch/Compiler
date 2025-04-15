@@ -21,7 +21,9 @@ typedef struct symEntry{
 } symEntry;
 
 /* You should use a linear linklist to keep track of all parameters passed to a function. The working_list_head should point to the beginning of the linklist and working_list_end should point to the end. Whenever a parameter is passed to a function, that node should also be added in this list. */
+param *working_list_head = (param*)malloc(sizeof(param));
 param *working_list_head = NULL;
+param *working_list_end = (param*)malloc(sizeof(param));
 param *working_list_end = NULL;
 
 typedef struct table_node{
@@ -47,10 +49,17 @@ int ST_insert(char *id, int data_type, int symbol_type, int* scope);
 /* The function for looking up if a symbol exists in the current_scope. Always start looking for the symbol from the node that is being pointed to by the current_scope variable*/
 symEntry* ST_lookup(char *id);
 
-/* Creates a param* whenever formalDecl in the parser.y file declares a formal parameter. Please note that we are maining a separate linklist to keep track of all the formal declarations because until the function body is processed, we will not know the number of parameters in advance. Link list provides a way for the formalDecl to declare as many parameters as needed.*/
+/* Creates a param* whenever formalDecl in the parser.y file declares a formal parameter. 
+Please note that we are maining a separate linklist to keep track of all the formal declarations 
+because until the function body is processed, we will not know the number of parameters in advance. 
+Link list provides a way for the formalDecl to declare as many parameters as needed.*/
 void add_param(int data_type, int symbol_type);
 
-/*connect_params is called after the funBody is processed in parser.y. At this point, the parser has already seen all the formal parameter declaration and has built the entire list of parameters to the function. This list is pointed to by the working_list_head pointer. current_scope->parent->strTable[index]->params should point to the header of that parameter list. */
+/*connect_params is called after the funBody is processed in parser.y. 
+At this point, the parser has already seen all the formal parameter declaration and 
+has built the entire list of parameters to the function. This list is pointed to by the 
+working_list_head pointer. current_scope->parent->strTable[index]->params should point to 
+the header of that parameter list. */
 void connect_params(int i, int num_params);
 
 // Creates a new scope within the current scope and sets that as the current scope.

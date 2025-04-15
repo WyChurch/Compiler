@@ -93,6 +93,36 @@ int ST_lookup(char *id, char *scope) {
     return -1;
 }
 
+void add_param(int data_type, int symbol_table){
+    param *new_param = (param*)malloc(sizeof(param));
+    new_param->data_type = data_type;
+    new_param->symbol_type = symbol_table;
+    new_param->next = NULL;
+
+    if (working_list_head == NULL){
+        working_list_head = new_param;
+        return;
+    }
+    param* current = working_list_end;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    current->next = new_param;
+    working_list_end = new_param;
+}
+
+void connect_params(int i, int num_params){
+
+}
+
+void new_scope(){
+
+}
+
+void up_scope(){
+
+}
+
 void output_entry(int i){
     printf("%d: %s ", i, types[strTable[i].data_type]);
     printf("%s:%s%s\n", strTable[i].scope, strTable[i].id, symTypeMod[strTable[i].symbol_type]);
