@@ -35,7 +35,10 @@ typedef struct table_node{
 
 table_node* current_scope = NULL; // A global variable that should point to the symbol table node in the scope tree as discussed in lecture 13 and 14.
 
-/* The symbolTable, which will be implemented as a hash table. */
+/* The symbolTable, which will be implemented as a hash table. 
+(WYATT ADDED THIS FROM THE PAST PHASE, THE REASONING IS BECAUSE WE COPIED AND PASTED THE PHASE 2 strtab.c FILE 
+AND IF THIS IS NOT HERE THEN WE GET ERRORS WITHIN THE strtab.c FILE WITH THIS strTable[].
+MIGHT NOT NEED AND COULD BE DELETED IF THAT IS TRUE.) */
 struct symEntry strTable[MAXIDS];
 
 /* Inserts a symbol into the current symbol table tree. Please note that this function is used to instead into the tree of symbol tables and NOT the AST. Start at the returned hash and probe until we find an empty slot or the id.  */
