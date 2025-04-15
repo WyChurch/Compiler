@@ -30,7 +30,7 @@ unsigned long hash(unsigned char *str)
     return hash;
 }
 
-int ST_insert(char *id, char *scope, int data_type, int symbol_type){
+int ST_insert(char *id, int *scope, int data_type, int symbol_type){
     // TODO: Concatenate the scope and id and use that to create the hash key
     char key[256]; //scope + id
     snprintf(key, sizeof(key), "%s%s", scope, id);  
