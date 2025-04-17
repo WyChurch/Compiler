@@ -1,3 +1,4 @@
+
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,30 +6,14 @@
 #include <tree.h>
 #include <strtab.h>
 
-
 int yylex(void);
 int yyerror(const char *s);
 
 extern int yylineno;
-/* nodeTypes refer to different types of internal and external nodes that can be part of the abstract syntax tree.*/
-/*
-enum nodeTypes {PROGRAM, DECLLIST, DECL, VARDECL, TYPESPEC, FUNDECL,
-                FORMALDECLLIST, FORMALDECL, FUNBODY, LOCALDECLLIST,
-                STATEMENTLIST, STATEMENT, COMPOUNDSTMT, ASSIGNSTMT,
-                CONDSTMT, LOOPSTMT, RETURNSTMT, EXPRESSION, RELOP,
-                ADDEXPR, ADDOP, TERM, MULOP, FACTOR, FUNCCALLEXPR,
-                ARGLIST, INTEGER, IDENTIFIER, VAR, ARRAYDECL, CHAR,
-                FUNCTYPENAME};
-*/
-
-enum opType {ADD, SUB, MUL, DIV, LT, LTE, EQ, GTE, GT, NEQ};
-
-/* NOTE: mC has two kinds of scopes for variables : local and global. Variables declared outside any
-function are considered globals, whereas variables (and parameters) declared inside a function foo are local to foo. You should update the scope variable whenever you are inside a production that matches function definition (funDecl production). The rationale is that you are entering that function, so all variables, arrays, and other functions should be within this scope. You should pass this variable whenever you are calling the ST_insert or ST_lookup functions. This variable should be updated to scope = "" to indicate global scope whenever funDecl finishes. Treat these hints as helpful directions only. You may implement all of the functions as you like and not adhere to my instructions. As long as the directory structure is correct and the file names are correct, we are okay with it. */
 char* scope = "";
+int param_count = 0;
 %}
 
-/* the union describes the fields available in the yylval variable */
 %union
 {
     int value;
@@ -36,7 +21,6 @@ char* scope = "";
     char *strval;
 }
 
-/*Add token declarations below. The type <value> indicates that the associated token will be of a value type such as integer, float etc., and <strval> indicates that the associated token will be of string type.*/
 %token <strval> ID
 %token <value> INTCONST
 %token <strval> CHARCONST
@@ -76,15 +60,11 @@ char* scope = "";
 %token <strval> ERROR
 %token <strval> ILLEGAL_TOKEN
 
-/* TODO: Declate non-terminal symbols as of type node. Provided below is one example. node is defined as 'struct treenode *node' in the above union data structure. This declaration indicates to parser that these non-terminal variables will be implemented using a 'treenode *' type data structure. Hence, the circles you draw when drawing a parse tree, the following lines are telling yacc that these will eventually become circles in an AST. This is one of the connections between the AST you draw by hand and how yacc implements code to concretize that. We provide with two examples: program and declList from the grammar. Make sure to add the rest.  */
-
 %type <node> program declList decl varDecl typeSpecifier funDecl formalDeclList formalDecl funBody localDeclList statementList statement compoundStmt assignStmt condStmt loopStmt returnStmt var expression relop addExpr addop term mulop factor funcCallExpr argList
-
 
 %start program
 
 %%
-/* TODO: Your grammar and semantic actions go here. We provide with two example productions and their associated code for adding non-terminals to the AST.*/
 
 program         : declList
                  {
@@ -159,28 +139,29 @@ typeSpecifier   : KWD_INT
                     $$ = typeSpecNode;
                  }
                 ;
-funDecl         : typeSpecifier ID LPAREN formalDeclList RPAREN funBody
+formalDecl      : typeSpecifier ID
                 {
-                    ST_insert($2,scope,$1->val,FUNCTION);
-                    scope = $2;
-                    tree* funDeclNode = maketree(FUNDECL);
-                    addChild(funDeclNode, $1);
-                    addChild(funDeclNode, $4);
-                    addChild(funDeclNode, $6);
-                    tree* idNode = maketreeWithVal(IDENTIFIER,$2);
-                    addChild(funDeclNode, idNode);
-                    $$ = funDeclNode;
+                    ST_insert($2, scope, $1->val, SCALAR);
+                    tree* formDeclNode = maketree(FORMALDECL);
+                    addChild(formDeclNode, $1);
+                    tree* idNode = maketreeWithVal(IDENTIFIER, $2);
+                    addChild(formDeclNode, idNode);
+                    $$ = formDeclNode;
+
+                    add_param($1->val, SCALAR);
+                    param_count++;
                  }
-                | typeSpecifier ID LPAREN RPAREN funBody
+                | typeSpecifier ID LSQ_BRKT RSQ_BRKT
                 {
-                    ST_insert($2,scope,$1->val,FUNCTION);
-                    scope = $2;
-                    tree* funDeclNode = maketree(FUNDECL);
-                    addChild(funDeclNode, $1);
-                    addChild(funDeclNode, $5);
-                    tree* idNode = maketreeWithVal(IDENTIFIER,$2);
-                    addChild(funDeclNode, idNode);
-                    $$ = funDeclNode;
+                    ST_insert($2, scope, $1->val, ARRAY);
+                    tree* formDeclNode = maketree(FORMALDECL);
+                    addChild(formDeclNode, $1);
+                    tree* idNode = maketreeWithVal(IDENTIFIER, $2);
+                    addChild(formDeclNode, idNode);
+                    $$ = formDeclNode;
+
+                    add_param($1->val, ARRAY);
+                    param_count++;
                  }
                 ;
 formalDeclList  : formalDecl
@@ -197,33 +178,49 @@ formalDeclList  : formalDecl
                     $$ = formDeclNode;
                  }
                 ;
-formalDecl      : typeSpecifier ID
+funDecl         : typeSpecifier ID LPAREN formalDeclList RPAREN funBody
                 {
-                    ST_insert($2,scope,$1->val,SCALAR);
-                    tree* formDeclNode = maketree(FORMALDECL);
-                    addChild(formDeclNode, $1);
-                    tree* idNode = maketreeWithVal(IDENTIFIER,$2);
-                    addChild(formDeclNode, idNode);
-                    $$ = formDeclNode;
+                    int index = ST_insert($2, scope, $1->val, FUNCTION);
+                    scope = $2;
+                    connect_params(index, param_count);
+                    param_count = 0;
+                    scope = "";
+
+                    tree* funDeclNode = maketree(FUNDECL);
+                    addChild(funDeclNode, $1);
+                    addChild(funDeclNode, $4);
+                    addChild(funDeclNode, $6);
+                    tree* idNode = maketreeWithVal(IDENTIFIER, $2);
+                    addChild(funDeclNode, idNode);
+                    $$ = funDeclNode;
                  }
-                | typeSpecifier ID LSQ_BRKT RSQ_BRKT
+                | typeSpecifier ID LPAREN RPAREN funBody
                 {
-                    ST_insert($2,scope,$1->val,ARRAY);
-                    tree* formDeclNode = maketree(FORMALDECL);
-                    addChild(formDeclNode, $1);
-                    tree* idNode = maketreeWithVal(IDENTIFIER,$2);
-                    addChild(formDeclNode, idNode);
-                    $$ = formDeclNode;
+                    int index = ST_insert($2, scope, $1->val, FUNCTION);
+                    scope = $2;
+                    connect_params(index, 0);
+                    scope = "";
+
+                    tree* funDeclNode = maketree(FUNDECL);
+                    addChild(funDeclNode, $1);
+                    addChild(funDeclNode, $5);
+                    tree* idNode = maketreeWithVal(IDENTIFIER, $2);
+                    addChild(funDeclNode, idNode);
+                    $$ = funDeclNode;
                  }
                 ;
 funBody         : LCRLY_BRKT localDeclList statementList RCRLY_BRKT
                 {
+                    new_scope();  // Open a new scope for function body
+
                     tree* funBodyNode = maketree(FUNBODY);
                     addChild(funBodyNode, $2);
                     addChild(funBodyNode, $3);
-                    scope = "";
+
+                    up_scope();    // Close the scope at the end
+                    scope = "";    // Reset to global
                     $$ = funBodyNode;
-                 }
+                }
                 ;
 localDeclList   : 
                 {
@@ -523,7 +520,6 @@ argList         : expression
                     $$ = argListNode;
                  }
                 ;
-
 %%
 
 int yywarning(char * msg){
