@@ -8,17 +8,28 @@
 A LOT WILL NEED TO BE CHAGED AND ERRORS WILL POP UP BECAUSE OF MISSING FUNCTIONS 
 OR DIFFERENT ARGUMENTS WITHIN FUNCTIONS IN THE HEADER FILE*/
 
-
+param *working_list_head = NULL;
+param *working_list_end = NULL;
+table_node *current_scope = NULL;
 
 //to fix "types" being undefined line 95
 const char *types[] = {"int", "char", "void"};
 //for "symTypeMod" also being undefined line 96
 const char *symTypeMod[] = {"", "[]", "()"};  // SCALAR, ARRAY, FUNCTION
 
-
-
-
-
+void print_sym_tab(void) {
+    printf("---- Symbol Table ----\n");
+    for (int i = 0; i < MAXIDS; i++) {
+        if (strTable[i].id != NULL) {
+            printf("ID: %-10s | Scope: %-10s | Type: %d | SymType: %d\n",
+                   strTable[i].id,
+                   strTable[i].scope,
+                   strTable[i].data_type,
+                   strTable[i].symbol_type);
+        }
+    }
+    printf("-----------------------\n");
+}
 
 /* Provided is a hash function that you may call to get an integer back. */
 unsigned long hash(unsigned char *str)
@@ -32,7 +43,7 @@ unsigned long hash(unsigned char *str)
     return hash;
 }
 
-int ST_insert(char *id, int *scope, int data_type, int symbol_type){
+int ST_insert(char *id, char *scope, int data_type, int symbol_type){
     char key[256]; //scope + id
     snprintf(key, sizeof(key), "%s%s", scope, id);  
    

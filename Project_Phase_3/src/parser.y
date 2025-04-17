@@ -1,13 +1,15 @@
-
 %{
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <tree.h>
+#include "tree.h"
 #include <strtab.h>
+
+#define YYDEBUG 1
 
 int yylex(void);
 int yyerror(const char *s);
+
 
 extern int yylineno;
 char* scope = "";

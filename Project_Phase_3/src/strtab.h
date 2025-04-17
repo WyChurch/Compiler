@@ -2,6 +2,8 @@
 #define STRTAB_H
 #define MAXIDS 1000
 
+#include <stddef.h>
+
 enum dataType {INT_TYPE, CHAR_TYPE, VOID_TYPE};
 enum symbolType {SCALAR, ARRAY, FUNCTION};
 
@@ -21,10 +23,8 @@ typedef struct symEntry{
 } symEntry;
 
 /* You should use a linear linklist to keep track of all parameters passed to a function. The working_list_head should point to the beginning of the linklist and working_list_end should point to the end. Whenever a parameter is passed to a function, that node should also be added in this list. */
-param *working_list_head = (param*)malloc(sizeof(param));
-param *working_list_head = NULL;
-param *working_list_end = (param*)malloc(sizeof(param));
-param *working_list_end = NULL;
+param *working_list_head;
+param *working_list_end;
 
 typedef struct table_node{
     symEntry* strTable[MAXIDS];
@@ -35,7 +35,9 @@ typedef struct table_node{
     struct table_node* next; // Next subscope that shares the same parent
 } table_node; // Describes each node in the symbol table tree and is used to implement a tree for the nested scope as discussed in lecture 13 and 14.
 
-table_node* current_scope = NULL; // A global variable that should point to the symbol table node in the scope tree as discussed in lecture 13 and 14.
+table_node* current_scope; // A global variable that should point to the symbol table node in the scope tree as discussed in lecture 13 and 14.
+
+void print_sym_tab(void);
 
 /* The symbolTable, which will be implemented as a hash table. 
 (WYATT ADDED THIS FROM THE PAST PHASE, THE REASONING IS BECAUSE WE COPIED AND PASTED THE PHASE 2 strtab.c FILE 
@@ -44,10 +46,10 @@ MIGHT NOT NEED AND COULD BE DELETED IF THAT IS TRUE.) */
 struct symEntry strTable[MAXIDS];
 
 /* Inserts a symbol into the current symbol table tree. Please note that this function is used to instead into the tree of symbol tables and NOT the AST. Start at the returned hash and probe until we find an empty slot or the id.  */
-int ST_insert(char *id, int data_type, int symbol_type, int* scope);
+int ST_insert(char *id, char *scope, int data_type, int symbol_type);
 
 /* The function for looking up if a symbol exists in the current_scope. Always start looking for the symbol from the node that is being pointed to by the current_scope variable*/
-symEntry* ST_lookup(char *id);
+int ST_lookup(char *id, char *scope);
 
 /* Creates a param* whenever formalDecl in the parser.y file declares a formal parameter. 
 Please note that we are maining a separate linklist to keep track of all the formal declarations 

@@ -1,8 +1,12 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include "strtab.h"
 #include<../src/tree.h>
 #include<../src/strtab.h>
+
+int yyparse(void);
+void print_sym_tab(void);
 
 extern FILE* yyin;
 
@@ -16,6 +20,7 @@ void printhelp(){
 int main(int argc, char *argv[]) {
     int p_ast = 0;
     int p_symtab = 0;
+    int yydebug = 1;
 
     // Skip first arg (program name), then check all but last for options.
     for(int i=1; i < argc - 1; i++){

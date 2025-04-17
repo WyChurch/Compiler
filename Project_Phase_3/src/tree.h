@@ -3,13 +3,30 @@
 
 #define MAXCHILDREN 100
 
+enum nodeTypes {
+      PROGRAM, DECLLIST, DECL, VARDECL, TYPESPEC, FUNDECL, FORMALDECLLIST,
+      FORMALDECL, FUNBODY, LOCALDECLLIST, STATEMENTLIST, STATEMENT,
+      COMPOUNDSTMT, ASSIGNSTMT, CONDSTMT, LOOPSTMT, RETURNSTMT,
+      EXPRESSION, RELOP, ADDEXPR, ADDOP, TERM, MULOP, FACTOR,
+      FUNCCALLEXPR, ARGLIST, INTEGER, IDENTIFIER, VAR, ARRAYDECL,
+      CHAR, FUNCTYPENAME
+};
+
+enum opType {
+      ADD, SUB, MUL, DIV,
+      LT, LTE, EQ, GTE, GT, NEQ
+};
+
 typedef struct treenode tree;
+
+
 
 /* tree node - you may want to add more fields */
 struct treenode {
       int nodeKind;
       int numChildren;
       int val;
+      char *charVal;
       int scope; // Used for var/id. Index of the scope. This works b/c only global and local.
       int type;
       int sym_type; // Only used by var to distinguish SCALAR vs ARRAY
@@ -23,9 +40,13 @@ tree *ast; /* pointer to AST root */
 tree *maketree(int kind);
 
 /* builds sub tree with leaf node */
-tree *maketreeWithVal(int kind, int val);
+tree *maketreeWithVal(int kind, char *val);
+
+tree *maketreeWithIntVal(int kind, int val);
 
 void addChild(tree *parent, tree *child);
+
+void addCharChild(tree *parent, tree *child);
 
 void printAst(tree *root, int nestLevel);
 

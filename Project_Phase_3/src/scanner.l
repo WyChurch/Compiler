@@ -85,7 +85,7 @@ yylineno = 1;
  /* Other */;
 {newline}       {scancol = 1; scanlineno++; yylineno = scanlineno;}
 {whitespace}    {updateCol(); /* skip whitespace */}
-.               {return ILLEGAL_TOK;}
+.               {return ILLEGAL_TOKEN;}
 
 %%
 

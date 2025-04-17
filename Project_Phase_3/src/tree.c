@@ -1,4 +1,4 @@
-#include<tree.h>
+#include"tree.h"
 #include<strtab.h>
 #include<stdio.h>
 #include<stdlib.h>
@@ -23,12 +23,27 @@ tree *maketree(int kind) {
       return this;
 }
 
-tree *maketreeWithVal(int kind, int val) {
+tree *maketreeWithVal(int kind, char *val) {
       tree *this = (tree *) malloc(sizeof(struct treenode));
       this->nodeKind = kind;
       this->numChildren = 0;
-      this->val = val;
+      this->charVal = strdup(val);
       return this;
+}
+
+tree *maketreeWithIntVal(int kind, int val) {
+    tree *this = (tree *) malloc(sizeof(struct treenode));
+    this->type = kind;         // corresponds to nodeKind / kind of AST node
+    this->val = val;           // value for constants or enums
+    this->numChildren = 0;
+    this->parent = NULL;
+    this->scope = -1;          // optional: depends on use
+    this->sym_type = -1;       // optional: for SCALAR/ARRAY etc.
+
+    for (int i = 0; i < MAXCHILDREN; i++)
+        this->children[i] = NULL;
+
+    return this;
 }
 
 void addChild(tree *parent, tree *child) {
@@ -40,13 +55,17 @@ void addChild(tree *parent, tree *child) {
       parent->numChildren++;
 }
 
+void addCharChild(tree *parent, tree *child) {
+    parent->children[parent->numChildren++] = child;
+}
+
 void printAst(tree *node, int nestLevel) {
       char* nodeName = nodeNames[node->nodeKind];
       if(strcmp(nodeName,"identifier") == 0){
           if(node->val == -1)
               printf("%s,%s\n", nodeName,"undeclared variable");
-          else
-              printf("%s,%s\n", nodeName,get_symbol_id(node->val));
+          //else
+              //printf("%s,%s\n", nodeName,get_symbol_id(node->val));
       }
       else if(strcmp(nodeName,"integer") == 0){
           printf("%s,%d\n", nodeName,node->val);
