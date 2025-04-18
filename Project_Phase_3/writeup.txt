@@ -1,0 +1,10 @@
+Section 1.
+    Julie Hargrave, Wyatt Churchman, Samantha Nava for CS4318
+
+Section 2. 
+    Julie - implemented new functions for strtab.c
+    Wyatt - did most of the debugging and organizing; crutial in making everything work together
+    Sam - aided in debugging and impementation
+
+Section 3.
+    To test on our own, we mainly used the provided tests. 
