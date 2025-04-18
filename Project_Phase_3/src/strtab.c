@@ -123,15 +123,33 @@ void add_param(int data_type, int symbol_table){
 }
 
 void connect_params(int i, int num_params){
-
+    current_scope->parent->strTable[i]->params = working_list_head;
 }
 
 void new_scope(){
+    table_node* new_scope = (table_node*)malloc(sizeof(table_node));
+    memset(new_scope->strTable, 0, sizeof(new_scope->strTable));
+    new_scope->numChildren = 0;
+    new_scope->parent = current_scope;
+    new_scope->first_child = NULL;
+    new_scope->last_child = NULL;
+    new_scope->next = NULL;
 
+    if (current_scope) {
+        if (!current_scope->first_child) {
+            current_scope->first_child = new_scope;
+        } else {
+            current_scope->last_child->next = new_scope;
+        }
+        current_scope->last_child = new_scope;
+        current_scope->numChildren++;
+    }
+
+    current_scope = new_scope;
 }
 
 void up_scope(){
-
+    current_scope = current_scope->parent;
 }
 
 void output_entry(int i){
