@@ -46,8 +46,6 @@ tree *maketreeWithIntVal(int kind, int val);
 
 void addChild(tree *parent, tree *child);
 
-void addCharChild(tree *parent, tree *child);
-
 void printAst(tree *root, int nestLevel);
 
 /* Adds all children of sublist to list */

@@ -55,23 +55,19 @@ void addChild(tree *parent, tree *child) {
       parent->numChildren++;
 }
 
-void addCharChild(tree *parent, tree *child) {
-    parent->children[parent->numChildren++] = child;
-}
-
 void printAst(tree *node, int nestLevel) {
       char* nodeName = nodeNames[node->nodeKind];
       if(strcmp(nodeName,"identifier") == 0){
           if(node->val == -1)
               printf("%s,%s\n", nodeName,"undeclared variable");
-          //else
-              //printf("%s,%s\n", nodeName,get_symbol_id(node->val));
+          else
+              printf("%s,%s\n", nodeName,get_symbol_id(node->val));
       }
       else if(strcmp(nodeName,"integer") == 0){
           printf("%s,%d\n", nodeName,node->val);
       }
       else if(strcmp(nodeName,"char") == 0){
-          printf("%s,%c\n", nodeName,node->val);
+          printf("%s,%s\n", nodeName,node->charVal);
       }
       else if(strcmp(nodeName,"typeSpecifier") == 0){
           printf("%s,%s\n", nodeName,typeNames[node->val]);

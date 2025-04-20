@@ -3,6 +3,7 @@
 #include<string.h>
 #include "strtab.h"
 
+symEntry strTable[MAXIDS];
 
 /*THIS WAS ALL COPIED AND PASTED FROM THE PHASE 2 OF THE PROJECT. 
 A LOT WILL NEED TO BE CHAGED AND ERRORS WILL POP UP BECAUSE OF MISSING FUNCTIONS 
@@ -37,7 +38,7 @@ unsigned long hash(unsigned char *str)
     unsigned long hash = 5381;
     int c;
 
-    while (c == *str++)
+    while ((c = *str++))
         hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 
     return hash;
@@ -112,6 +113,7 @@ void add_param(int data_type, int symbol_table){
 
     if (working_list_head == NULL){
         working_list_head = new_param;
+        working_list_end = new_param;
         return;
     }
     param* current = working_list_end;
@@ -124,6 +126,10 @@ void add_param(int data_type, int symbol_table){
 
 void connect_params(int i, int num_params){
     current_scope->parent->strTable[i]->params = working_list_head;
+    if (!current_scope || !current_scope->parent) {
+        fprintf(stderr, "Error: current_scope or parent is NULL in connect_params.\n");
+        return;
+    }
 }
 
 void new_scope(){
@@ -157,3 +163,8 @@ void output_entry(int i){
     printf("%s:%s%s\n", strTable[i].scope, strTable[i].id, symTypeMod[strTable[i].symbol_type]);
 }
 
+char* get_symbol_id(int index) {
+    if (index >= 0 && index < MAXIDS && strTable[index].id != NULL)
+        return strTable[index].id;
+    return "??";
+}

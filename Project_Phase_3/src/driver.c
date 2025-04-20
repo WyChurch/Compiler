@@ -2,13 +2,14 @@
 #include<stdlib.h>
 #include<string.h>
 #include "strtab.h"
-#include<../src/tree.h>
-#include<../src/strtab.h>
+#include "tree.h"
 
 int yyparse(void);
 void print_sym_tab(void);
+void printAst(struct treenode* node, int indent);
 
 extern FILE* yyin;
+extern struct treenode *ast;
 
 void printhelp(){
     printf("Usage: mcc [--ast] [--sym] [-h|--help] FILE\n");
