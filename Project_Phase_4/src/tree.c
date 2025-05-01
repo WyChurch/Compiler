@@ -4,17 +4,7 @@
 #include<stdlib.h>
 #include<string.h>
 
-/* string values for ast node types, makes tree output more readable */
-char *nodeNames[33] = {"program", "declList", "decl", "varDecl", "typeSpecifier",
-                       "funDecl", "formalDeclList", "formalDecl", "funBody",
-                       "localDeclList", "statementList", "statement", "compoundStmt",
-                       "assignStmt", "condStmt", "loopStmt", "returnStmt","expression",
-                       "relop", "addExpr", "addop", "term", "mulop", "factor",
-                       "funcCallExpr", "argList", "integer", "identifier", "var",
-                       "arrayDecl", "char", "funcTypeName"};
 
-char *typeNames[3] = {"int", "char", "void"};
-char *ops[10] = {"+", "-", "*", "/", "<", "<=", "==", ">=", ">", "!="};
 
 tree *maketree(int kind) {
       tree *this = (tree *) malloc(sizeof(struct treenode));

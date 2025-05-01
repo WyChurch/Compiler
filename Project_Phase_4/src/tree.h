@@ -17,6 +17,18 @@ enum opType {
       LT, LTE, EQ, GTE, GT, NEQ
 };
 
+/* string values for ast node types, makes tree output more readable */
+char *nodeNames[33] = {"program", "declList", "decl", "varDecl", "typeSpecifier",
+      "funDecl", "formalDeclList", "formalDecl", "funBody",
+      "localDeclList", "statementList", "statement", "compoundStmt",
+      "assignStmt", "condStmt", "loopStmt", "returnStmt","expression",
+      "relop", "addExpr", "addop", "term", "mulop", "factor",
+      "funcCallExpr", "argList", "integer", "identifier", "var",
+      "arrayDecl", "char", "funcTypeName"};
+
+char *typeNames[3] = {"int", "char", "void"};
+char *ops[10] = {"+", "-", "*", "/", "<", "<=", "==", ">=", ">", "!="};
+
 typedef struct treenode tree;
 
 
