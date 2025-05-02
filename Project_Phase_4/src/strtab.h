@@ -70,6 +70,6 @@ void new_scope();
 // Moves towards the root of the sym table tree.
 void up_scope();
 
-char* get_symbol_id(int index);
+ const char* get_symbol_id(int index);
 
 #endif

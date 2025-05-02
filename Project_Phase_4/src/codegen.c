@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include "tree.h"
+#include "strtab.h"
 
 // Utility: emit MIPS code
 static void emit(const char *fmt, ...) {
@@ -86,6 +87,68 @@ void gen_stmt(tree *node) {
                 emit("  move $a1, $t0");
             else
                 emit("  # unknown assignment target: %s", name);
+            break;
+        }
+
+        case IFSTMT: {
+            static int labelCounter = 0;
+            int elseLabel = labelCounter++;
+            tree *cond = getChild(node, 0);
+            tree *thenStmt = getChild(node, 1);
+
+            gen_expr(cond); // result in $t0
+            emit("  beq $t0, $zero, L%d", elseLabel);  // if false, jump to Lelse
+            gen_stmt(thenStmt);
+            emit("L%d:", elseLabel);
+            break;
+        }
+
+        case IFELSESTMT: {
+            static int labelCounter = 1000;
+            int elseLabel = labelCounter++;
+            int endLabel = labelCounter++;
+            tree *cond = getChild(node, 0);
+            tree *thenStmt = getChild(node, 1);
+            tree *elseStmt = getChild(node, 2);
+
+            gen_expr(cond); // result in $t0
+            emit("  beq $t0, $zero, L%d", elseLabel); // if false, go to else
+            gen_stmt(thenStmt);
+            emit("  j L%d", endLabel);                // skip else
+            emit("L%d:", elseLabel);
+            gen_stmt(elseStmt);
+            emit("L%d:", endLabel);
+            break;
+        }
+
+
+        case WHILESTMT: {
+            static int labelCounter = 2000;
+            int startLabel = labelCounter++;
+            int endLabel = labelCounter++;
+
+            emit("L%d:", startLabel);
+            gen_expr(getChild(node, 0)); // condition
+            emit("  beq $t0, $zero, L%d", endLabel);
+            gen_stmt(getChild(node, 1)); // body
+            emit("  j L%d", startLabel);
+            emit("L%d:", endLabel);
+            break;
+        }
+
+        case FORSTMT: {
+            static int labelCounter = 3000;
+            int startLabel = labelCounter++;
+            int endLabel = labelCounter++;
+
+            gen_stmt(getChild(node, 0)); // init
+            emit("L%d:", startLabel);
+            gen_expr(getChild(node, 1)); // condition
+            emit("  beq $t0, $zero, L%d", endLabel);
+            gen_stmt(getChild(node, 3)); // body
+            gen_stmt(getChild(node, 2)); // update
+            emit("  j L%d", startLabel);
+            emit("L%d:", endLabel);
             break;
         }
 

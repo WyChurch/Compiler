@@ -1,4 +1,4 @@
-int main(){
+int main() {
     char c;
     int i;
     i = 12;

@@ -9,7 +9,7 @@ enum nodeTypes {
       COMPOUNDSTMT, ASSIGNSTMT, CONDSTMT, LOOPSTMT, RETURNSTMT,
       EXPRESSION, RELOP, ADDEXPR, ADDOP, TERM, MULOP, FACTOR,
       FUNCCALLEXPR, ARGLIST, INTEGER, IDENTIFIER, VAR, ARRAYDECL,
-      CHAR, FUNCTYPENAME
+      CHAR, FUNCTYPENAME, IFSTMT, IFELSESTMT, WHILESTMT, FORSTMT, STRING
 };
 
 enum opType {
@@ -18,16 +18,9 @@ enum opType {
 };
 
 /* string values for ast node types, makes tree output more readable */
-char *nodeNames[33] = {"program", "declList", "decl", "varDecl", "typeSpecifier",
-      "funDecl", "formalDeclList", "formalDecl", "funBody",
-      "localDeclList", "statementList", "statement", "compoundStmt",
-      "assignStmt", "condStmt", "loopStmt", "returnStmt","expression",
-      "relop", "addExpr", "addop", "term", "mulop", "factor",
-      "funcCallExpr", "argList", "integer", "identifier", "var",
-      "arrayDecl", "char", "funcTypeName"};
-
-char *typeNames[3] = {"int", "char", "void"};
-char *ops[10] = {"+", "-", "*", "/", "<", "<=", "==", ">=", ">", "!="};
+extern const char *typeNames[];
+extern const char *ops[];
+extern const char *nodeNames[];
 
 typedef struct treenode tree;
 

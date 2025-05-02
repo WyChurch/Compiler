@@ -163,7 +163,7 @@ void output_entry(int i){
     printf("%s:%s%s\n", strTable[i].scope, strTable[i].id, symTypeMod[strTable[i].symbol_type]);
 }
 
-char* get_symbol_id(int index) {
+const char* get_symbol_id(int index) {
     if (index >= 0 && index < MAXIDS && strTable[index].id != NULL)
         return strTable[index].id;
     return "??";

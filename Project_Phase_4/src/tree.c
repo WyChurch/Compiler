@@ -1,10 +1,20 @@
 #include"tree.h"
-#include<strtab.h>
+#include"strtab.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 
+const char *typeNames[3] = {"int", "char", "void"};
 
+const char *nodeNames[33] = {"program", "declList", "decl", "varDecl", "typeSpecifier",
+    "funDecl", "formalDeclList", "formalDecl", "funBody",
+    "localDeclList", "statementList", "statement", "compoundStmt",
+    "assignStmt", "condStmt", "loopStmt", "returnStmt","expression",
+    "relop", "addExpr", "addop", "term", "mulop", "factor",
+    "funcCallExpr", "argList", "integer", "identifier", "var",
+    "arrayDecl", "char", "funcTypeName"};
+
+const char *ops[] = { "+", "-", "*", "/", "<", "<=", "==", ">=", ">", "!=" };
 
 tree *maketree(int kind) {
       tree *this = (tree *) malloc(sizeof(struct treenode));
@@ -46,7 +56,7 @@ void addChild(tree *parent, tree *child) {
 }
 
 void printAst(tree *node, int nestLevel) {
-      char* nodeName = nodeNames[node->nodeKind];
+      const char* nodeName = nodeNames[node->nodeKind];
       if(strcmp(nodeName,"identifier") == 0){
           if(node->val == -1)
               printf("%s,%s\n", nodeName,"undeclared variable");
