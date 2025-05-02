@@ -18,42 +18,35 @@ void printhelp(){
     printf("\t-h,--help:\tPrint this help information and exit.\n\n");
 }
 
-int main(int argc, char *argv[]) {
-    int p_ast = 0;
-    int p_symtab = 0;
-    int yydebug = 1;
 
-    // Skip first arg (program name), then check all but last for options.
-    for(int i=1; i < argc - 1; i++){
-        if(strcmp(argv[i],"-h")==0 || strcmp(argv[i],"--help")==0){
-            printhelp();
-            return 0;
-        }
-        else if(strcmp(argv[i],"--ast")==0){
-            p_ast = 1;
-        }
-        else if(strcmp(argv[i],"--sym")==0){
-            p_symtab = 1;
-        }
-        else{
-            printhelp();
-            return 0;
+// Codegen headers
+void gen_stmt(tree *node);
+void gen_expr(tree *node);
+void gen_function_body(tree *stmtList);
+
+int main(int argc, char **argv) {
+    if (yyparse() == 0) {
+        printf("# Parsing successful.\n");
+
+        // ast is expected to be a 'program' node or 'funDecl'
+        if (ast == NULL) {
+            fprintf(stderr, "No AST generated.\n");
+            return 1;
         }
 
+        // If ast is a program with a declList child:
+        for (int i = 0; i < ast->numChildren; i++) {
+            tree *decl = getChild(ast, i);
+            if (decl->nodeKind == FUNDECL) {
+                tree *funBody = getChild(decl, 3); // funBody
+                tree *stmtList = getChild(funBody, 1); // statementList
+                gen_function_body(stmtList); // Generate code
+            }
+        }
+
+    } else {
+        fprintf(stderr, "Parse failed.\n");
     }
 
-    yyin = fopen(argv[argc - 1],"r");
-    if(!yyin){
-        printf("error: unable to read source file %s\n",argv[argc-1]);
-        return -1;
-    }
-
-    if (!yyparse()){
-        printf("Compilation finished.\n\n");
-        if(p_ast)
-            printAst(ast, 1);
-        if(p_symtab)
-            print_sym_tab();
-    }
     return 0;
 }
