@@ -125,11 +125,14 @@ void add_param(int data_type, int symbol_table){
 }
 
 void connect_params(int i, int num_params){
-    current_scope->parent->strTable[i]->params = working_list_head;
+    
     if (!current_scope || !current_scope->parent) {
         fprintf(stderr, "Error: current_scope or parent is NULL in connect_params.\n");
         return;
     }
+
+    current_scope->parent->strTable[i]->params = working_list_head;
+
 }
 
 void new_scope(){
