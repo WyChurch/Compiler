@@ -14,10 +14,12 @@ static void emit(const char *fmt, ...) {
     va_end(args);
 }
 
-// Forward declaration
+// Forward declarations
 void gen_expr(tree *node);
+void gen_stmt(tree *node);
+void gen_function_body(tree *stmtList);
 
-// Expression generator (handles integer, identifier, +, -, *, /)
+// Expression generator
 void gen_expr(tree *node) {
     if (node == NULL) return;
 
@@ -33,44 +35,42 @@ void gen_expr(tree *node) {
             else if (strcmp(name, "b") == 0)
                 emit("  move $t0, $a1");
             else
-                emit("  # unknown identifier: %s", name); // placeholder
+                emit("  # unknown identifier: %s", name);
             break;
         }
 
-        case ADDEXPR: {
-            gen_expr(getChild(node, 0));      // left
+        case ADDEXPR:
+            gen_expr(getChild(node, 0));  // left
             emit("  move $t1, $t0");
-            gen_expr(getChild(node, 1));      // right
+            gen_expr(getChild(node, 2));  // right
             emit("  move $t2, $t0");
-
-            const char *op = ops[node->val];
-            if (strcmp(op, "+") == 0)
+            if (node->val == ADD)
                 emit("  add $t0, $t1, $t2");
-            else if (strcmp(op, "-") == 0)
+            else if (node->val == SUB)
                 emit("  sub $t0, $t1, $t2");
+            else
+                emit("  # unknown addop");
             break;
-        }
 
-        case TERM: {
-            gen_expr(getChild(node, 0));      // left
+        case TERM:
+            gen_expr(getChild(node, 0));  // left
             emit("  move $t1, $t0");
-            gen_expr(getChild(node, 1));      // right
+            gen_expr(getChild(node, 2));  // right
             emit("  move $t2, $t0");
-
-            const char *op = ops[node->val];
-            if (strcmp(op, "*") == 0)
+            if (node->val == MUL)
                 emit("  mul $t0, $t1, $t2");
-            else if (strcmp(op, "/") == 0)
+            else if (node->val == DIV)
                 emit("  div $t1, $t2\n  mflo $t0");
+            else
+                emit("  # unknown mulop");
             break;
-        }
 
         default:
             emit("  # Unsupported expr nodeKind: %d", node->nodeKind);
     }
 }
 
-// Assignment generator
+// Statement generator
 void gen_stmt(tree *node) {
     if (node == NULL) return;
 
@@ -93,12 +93,9 @@ void gen_stmt(tree *node) {
         case IFSTMT: {
             static int labelCounter = 0;
             int elseLabel = labelCounter++;
-            tree *cond = getChild(node, 0);
-            tree *thenStmt = getChild(node, 1);
-
-            gen_expr(cond); // result in $t0
-            emit("  beq $t0, $zero, L%d", elseLabel);  // if false, jump to Lelse
-            gen_stmt(thenStmt);
+            gen_expr(getChild(node, 0)); // condition
+            emit("  beq $t0, $zero, L%d", elseLabel);
+            gen_stmt(getChild(node, 1)); // then
             emit("L%d:", elseLabel);
             break;
         }
@@ -107,30 +104,24 @@ void gen_stmt(tree *node) {
             static int labelCounter = 1000;
             int elseLabel = labelCounter++;
             int endLabel = labelCounter++;
-            tree *cond = getChild(node, 0);
-            tree *thenStmt = getChild(node, 1);
-            tree *elseStmt = getChild(node, 2);
-
-            gen_expr(cond); // result in $t0
-            emit("  beq $t0, $zero, L%d", elseLabel); // if false, go to else
-            gen_stmt(thenStmt);
-            emit("  j L%d", endLabel);                // skip else
+            gen_expr(getChild(node, 0)); // condition
+            emit("  beq $t0, $zero, L%d", elseLabel);
+            gen_stmt(getChild(node, 1)); // then
+            emit("  j L%d", endLabel);
             emit("L%d:", elseLabel);
-            gen_stmt(elseStmt);
+            gen_stmt(getChild(node, 2)); // else
             emit("L%d:", endLabel);
             break;
         }
-
 
         case WHILESTMT: {
             static int labelCounter = 2000;
             int startLabel = labelCounter++;
             int endLabel = labelCounter++;
-
             emit("L%d:", startLabel);
-            gen_expr(getChild(node, 0)); // condition
+            gen_expr(getChild(node, 0));
             emit("  beq $t0, $zero, L%d", endLabel);
-            gen_stmt(getChild(node, 1)); // body
+            gen_stmt(getChild(node, 1));
             emit("  j L%d", startLabel);
             emit("L%d:", endLabel);
             break;
@@ -140,7 +131,6 @@ void gen_stmt(tree *node) {
             static int labelCounter = 3000;
             int startLabel = labelCounter++;
             int endLabel = labelCounter++;
-
             gen_stmt(getChild(node, 0)); // init
             emit("L%d:", startLabel);
             gen_expr(getChild(node, 1)); // condition
@@ -152,6 +142,12 @@ void gen_stmt(tree *node) {
             break;
         }
 
+        case COMPOUNDSTMT:
+        case STATEMENTLIST:
+            for (int i = 0; i < node->numChildren; i++)
+                gen_stmt(getChild(node, i));
+            break;
+
         default:
             emit("  # Unsupported stmt nodeKind: %d", node->nodeKind);
     }
@@ -162,4 +158,22 @@ void gen_function_body(tree *stmtList) {
     for (int i = 0; i < stmtList->numChildren; i++) {
         gen_stmt(getChild(stmtList, i));
     }
+}
+
+// Entry point for code generation
+void generateCode(tree *node) {
+    if (!node) return;
+
+    printf(".text\n.globl main\nmain:\n");
+
+    for (int i = 0; i < node->numChildren; i++) {
+        tree *child = getChild(node, i);
+        if (child && child->nodeKind == FUNDECL) {
+            tree *funBody = getChild(child, 2); // depends on AST structure
+            gen_function_body(funBody);
+        }
+    }
+
+    emit("li $v0, 10");
+    emit("syscall");
 }

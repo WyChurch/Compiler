@@ -1,52 +1,81 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "strtab.h"
 #include "tree.h"
 
 int yyparse(void);
 void print_sym_tab(void);
-void printAst(struct treenode* node, int indent);
+void printAst(struct treenode *node, int indent);
 
-extern FILE* yyin;
-extern struct treenode *ast;
+// MIPS codegen headers
+void gen_stmt(tree *node);
+void gen_expr(tree *node);
+void gen_function_body(tree *stmtList);
+void generateCode(tree *node);  // <-- Add this if you use generateCode()
 
-void printhelp(){
+extern FILE *yyin;
+extern tree *ast;
+
+void printhelp() {
     printf("Usage: mcc [--ast] [--sym] [-h|--help] FILE\n");
     printf("\t--ast:\t\tPrint a textual representation of the constructed abstract syntax tree.\n");
     printf("\t--sym:\t\tPrint a textual representation of the constructed symbol table.\n");
     printf("\t-h,--help:\tPrint this help information and exit.\n\n");
 }
 
-
-// Codegen headers
-void gen_stmt(tree *node);
-void gen_expr(tree *node);
-void gen_function_body(tree *stmtList);
-
 int main(int argc, char **argv) {
-    if (yyparse() == 0) {
-        printf("# Parsing successful.\n");
+    int show_ast = 0, show_sym = 0;
+    char *filename = NULL;
 
-        // ast is expected to be a 'program' node or 'funDecl'
-        if (ast == NULL) {
+    // Parse command-line arguments
+    for (int i = 1; i < argc; ++i) {
+        if (strcmp(argv[i], "--ast") == 0) show_ast = 1;
+        else if (strcmp(argv[i], "--sym") == 0) show_sym = 1;
+        else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+            printhelp();
+            return 0;
+        } else {
+            filename = argv[i];  // Assume the first unknown argument is the file
+        }
+    }
+
+    if (!filename) {
+        fprintf(stderr, "No input file provided.\n");
+        printhelp();
+        return 1;
+    }
+
+    // Open input file
+    yyin = fopen(filename, "r");
+    if (!yyin) {
+        perror("fopen");
+        return 1;
+    }
+
+    // Parse input
+    if (yyparse() == 0) {
+        fprintf(stderr, "# Parsing successful.\n");
+
+        if (!ast) {
             fprintf(stderr, "No AST generated.\n");
             return 1;
         }
 
-        // If ast is a program with a declList child:
-        for (int i = 0; i < ast->numChildren; i++) {
-            tree *decl = getChild(ast, i);
-            if (decl->nodeKind == FUNDECL) {
-                tree *funBody = getChild(decl, 3); // funBody
-                tree *stmtList = getChild(funBody, 1); // statementList
-                gen_function_body(stmtList); // Generate code
-            }
+        if (show_ast) {
+            printAst(ast, 0);
         }
 
+        if (show_sym) {
+            print_sym_tab();
+        }
+
+        // MIPS code generation
+        generateCode(ast);  // or use your manual loop + gen_function_body
     } else {
         fprintf(stderr, "Parse failed.\n");
     }
 
+    fclose(yyin);
     return 0;
 }

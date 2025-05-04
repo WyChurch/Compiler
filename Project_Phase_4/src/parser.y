@@ -189,7 +189,23 @@ formalDeclList  : formalDecl
                     $$ = formDeclNode;
                  }
                 ;
-funDecl         : funcReturnType ID LPAREN formalDeclList RPAREN funBody
+funDecl         : funcReturnType ID LPAREN RPAREN funBody
+                {
+                    int index = ST_insert($2, scope, $1->val, FUNCTION);
+                    scope = $2;
+                    connect_params(index, 0);
+                    scope = "";
+
+                    tree* funDeclNode = maketree(FUNDECL);
+                    addChild(funDeclNode, $1); // return type
+                    tree* formals = maketree(FORMALDECLLIST); // empty param list
+                    addChild(funDeclNode, formals);
+                    addChild(funDeclNode, $5); // body
+                    tree* idNode = maketreeWithVal(IDENTIFIER, $2);
+                    addChild(funDeclNode, idNode);
+                    $$ = funDeclNode;
+                }
+                | funcReturnType ID LPAREN formalDeclList RPAREN funBody
                 {
                     int index = ST_insert($2, scope, $1->val, FUNCTION);
                     scope = $2;
@@ -198,27 +214,13 @@ funDecl         : funcReturnType ID LPAREN formalDeclList RPAREN funBody
                     scope = "";
 
                     tree* funDeclNode = maketree(FUNDECL);
-                    addChild(funDeclNode, $1);
-                    addChild(funDeclNode, $4);
-                    addChild(funDeclNode, $6);
+                    addChild(funDeclNode, $1); // return type
+                    addChild(funDeclNode, $4); // formal list
+                    addChild(funDeclNode, $6); // body
                     tree* idNode = maketreeWithVal(IDENTIFIER, $2);
                     addChild(funDeclNode, idNode);
                     $$ = funDeclNode;
-                 }
-                | varTypeSpecifier ID LPAREN RPAREN funBody
-                {
-                    int index = ST_insert($2, scope, $1->val, FUNCTION);
-                    scope = $2;
-                    connect_params(index, 0);
-                    scope = "";
-
-                    tree* funDeclNode = maketree(FUNDECL);
-                    addChild(funDeclNode, $1);
-                    addChild(funDeclNode, $5);
-                    tree* idNode = maketreeWithVal(IDENTIFIER, $2);
-                    addChild(funDeclNode, idNode);
-                    $$ = funDeclNode;
-                 }
+                }
                 ;
 funBody         : LCRLY_BRKT localDeclList statementList RCRLY_BRKT
                 {
@@ -237,7 +239,7 @@ localDeclList   :
                 {
                     tree* localDeclListNode = maketree(LOCALDECLLIST);
                     $$ = localDeclListNode;
-                 }
+                }
                 | varDecl localDeclList
                 {
                     tree* localDeclListNode = maketree(LOCALDECLLIST);
@@ -464,9 +466,7 @@ mulop           : OPER_MUL
 factor          : LPAREN expression RPAREN
                 {
                     tree* factorNode = maketree(FACTOR);
-                    tree *idNode = maketreeWithVal(IDENTIFIER, (yyvsp[(1) - (3)].strval));
-                    addChild(factorNode, idNode);
-                    //addCharChild(factorNode, $1);
+                    addChild(factorNode, $2);
                     $$ = factorNode;
                  }
                 | var

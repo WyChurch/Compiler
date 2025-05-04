@@ -1,5 +1,6 @@
+#line 1 "lex.yy.c"
 
-#line 2 "lex.yy.c"
+#line 3 "lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -490,9 +491,8 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "src/scanner.l"
-/* definitions */
-#line 5 "src/scanner.l"
-#include<stdio.h>
+#line 2 "src/scanner.l"
+#include <stdio.h>
 #include "parser.tab.h"
 
 int scancol = 1;
@@ -722,14 +722,10 @@ YY_DECL
 		}
 
 	{
-#line 33 "src/scanner.l"
+#line 26 "src/scanner.l"
 
 
-#line 36 "src/scanner.l"
- /* rules */
-
- /* Keywords */;
-#line 732 "lex.yy.c"
+#line 728 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -788,205 +784,199 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 39 "src/scanner.l"
-{updateCol(); return KWD_IF;}
+#line 28 "src/scanner.l"
+{ updateCol(); return KWD_IF; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 40 "src/scanner.l"
-{updateCol(); return KWD_ELSE;}
+#line 29 "src/scanner.l"
+{ updateCol(); return KWD_ELSE; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 41 "src/scanner.l"
-{updateCol(); return KWD_WHILE;}
+#line 30 "src/scanner.l"
+{ updateCol(); return KWD_WHILE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 42 "src/scanner.l"
-{updateCol(); return KWD_INT;}
+#line 31 "src/scanner.l"
+{ updateCol(); return KWD_INT; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 43 "src/scanner.l"
-{updateCol(); return KWD_CHAR;}
+#line 32 "src/scanner.l"
+{ updateCol(); return KWD_CHAR; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 44 "src/scanner.l"
-{updateCol(); return KWD_RETURN;}
+#line 33 "src/scanner.l"
+{ updateCol(); return KWD_RETURN; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 45 "src/scanner.l"
-{updateCol(); return KWD_VOID;}
+#line 34 "src/scanner.l"
+{ updateCol(); return KWD_VOID; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 46 "src/scanner.l"
-{updateCol(); return KWD_FOR;}
+#line 35 "src/scanner.l"
+{ updateCol(); return KWD_FOR; }
 	YY_BREAK
-/* Operators */;
 case 9:
 YY_RULE_SETUP
-#line 49 "src/scanner.l"
-{updateCol(); return OPER_ADD;}
+#line 37 "src/scanner.l"
+{ updateCol(); return OPER_ADD; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 50 "src/scanner.l"
-{updateCol(); return OPER_SUB;}
+#line 38 "src/scanner.l"
+{ updateCol(); return OPER_SUB; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 51 "src/scanner.l"
-{updateCol(); return OPER_MUL;}
+#line 39 "src/scanner.l"
+{ updateCol(); return OPER_MUL; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 52 "src/scanner.l"
-{updateCol(); return OPER_DIV;}
+#line 40 "src/scanner.l"
+{ updateCol(); return OPER_DIV; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 53 "src/scanner.l"
-{updateCol(); return OPER_LTE;}
+#line 41 "src/scanner.l"
+{ updateCol(); return OPER_LTE; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 54 "src/scanner.l"
-{updateCol(); return OPER_GTE;}
+#line 42 "src/scanner.l"
+{ updateCol(); return OPER_GTE; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 55 "src/scanner.l"
-{updateCol(); return OPER_LT;}
+#line 43 "src/scanner.l"
+{ updateCol(); return OPER_LT; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 56 "src/scanner.l"
-{updateCol(); return OPER_GT;}
+#line 44 "src/scanner.l"
+{ updateCol(); return OPER_GT; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 57 "src/scanner.l"
-{updateCol(); return OPER_EQ;}
+#line 45 "src/scanner.l"
+{ updateCol(); return OPER_EQ; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 58 "src/scanner.l"
-{updateCol(); return OPER_NEQ;}
+#line 46 "src/scanner.l"
+{ updateCol(); return OPER_NEQ; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 59 "src/scanner.l"
-{updateCol(); return OPER_ASGN;}
+#line 47 "src/scanner.l"
+{ updateCol(); return OPER_ASSN; }
 	YY_BREAK
-/* Punctuation */;
 case 20:
 YY_RULE_SETUP
-#line 62 "src/scanner.l"
-{updateCol(); return LSQ_BRKT;}
+#line 49 "src/scanner.l"
+{ updateCol(); return LSQ_BRKT; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 63 "src/scanner.l"
-{updateCol(); return RSQ_BRKT;}
+#line 50 "src/scanner.l"
+{ updateCol(); return RSQ_BRKT; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 64 "src/scanner.l"
-{updateCol(); return LCRLY_BRKT;}
+#line 51 "src/scanner.l"
+{ updateCol(); return LCRLY_BRKT; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 65 "src/scanner.l"
-{updateCol(); return RCRLY_BRKT;}
+#line 52 "src/scanner.l"
+{ updateCol(); return RCRLY_BRKT; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 66 "src/scanner.l"
-{updateCol(); return LPAREN;}
+#line 53 "src/scanner.l"
+{ updateCol(); return LPAREN; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 67 "src/scanner.l"
-{updateCol(); return RPAREN;}
+#line 54 "src/scanner.l"
+{ updateCol(); return RPAREN; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 68 "src/scanner.l"
-{updateCol(); return COMMA;}
+#line 55 "src/scanner.l"
+{ updateCol(); return COMMA; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 69 "src/scanner.l"
-{updateCol(); return SEMICLN;}
+#line 56 "src/scanner.l"
+{ updateCol(); return SEMICLN; }
 	YY_BREAK
-/* Identifiers */;
 case 28:
 YY_RULE_SETUP
-#line 72 "src/scanner.l"
-{updateCol(); yyerrormsg = "Identifiers may not start with a digit"; return ERROR;}
+#line 58 "src/scanner.l"
+{ updateCol(); yyerrormsg = "Identifiers may not start with a digit"; return ERROR; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 73 "src/scanner.l"
-{updateCol(); yylval.strval = strdup(yytext); return ID;}
+#line 59 "src/scanner.l"
+{ updateCol(); yylval.strval = strdup(yytext); return ID; }
 	YY_BREAK
-/* Constants */;
 case 30:
 YY_RULE_SETUP
-#line 76 "src/scanner.l"
-{updateCol(); yyerrormsg = "Integers may not have leading zeros"; return ERROR;}
+#line 60 "src/scanner.l"
+{ updateCol(); yyerrormsg = "Integers may not have leading zeros"; return ERROR; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 77 "src/scanner.l"
-{updateCol(); yylval.value = atoi(yytext); return INTCONST;}
+#line 61 "src/scanner.l"
+{ updateCol(); yylval.value = atoi(yytext); return INTCONST; }
 	YY_BREAK
 case 32:
 /* rule 32 can match eol */
 YY_RULE_SETUP
-#line 78 "src/scanner.l"
-{updateCol(); return processChar();}
+#line 62 "src/scanner.l"
+{ updateCol(); return processChar(); }
 	YY_BREAK
-/* Comments */;
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 81 "src/scanner.l"
-{updateCol(); /* skip comments */}
+#line 64 "src/scanner.l"
+{ updateCol(); }
 	YY_BREAK
 case 34:
 /* rule 34 can match eol */
 YY_RULE_SETUP
-#line 82 "src/scanner.l"
-{updateCol(); yyerrormsg = "Unterminated comment"; return ERROR;}
+#line 65 "src/scanner.l"
+{ updateCol(); yyerrormsg = "Unterminated comment"; return ERROR; }
 	YY_BREAK
-/* Other */;
 case 35:
 /* rule 35 can match eol */
 YY_RULE_SETUP
-#line 85 "src/scanner.l"
-{scancol = 1; scanlineno++; yylineno = scanlineno;}
+#line 67 "src/scanner.l"
+{ scancol = 1; scanlineno++; yylineno = scanlineno; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 86 "src/scanner.l"
-{updateCol(); /* skip whitespace */}
+#line 68 "src/scanner.l"
+{ updateCol(); }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 87 "src/scanner.l"
-{return ILLEGAL_TOKEN;}
+#line 69 "src/scanner.l"
+{ return ILLEGAL_TOKEN; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 89 "src/scanner.l"
+#line 71 "src/scanner.l"
 ECHO;
 	YY_BREAK
-#line 989 "lex.yy.c"
+#line 979 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1991,45 +1981,34 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 89 "src/scanner.l"
+#line 71 "src/scanner.l"
 
 
-/* user routines */
-
-void updateCol(){
+void updateCol() {
     yycol = scancol;
     scancol += yyleng;
 }
 
-void countLines(){
+void countLines() {
     yylineno = scanlineno;
-    for (int i=0; i<yyleng; i++){
+    for (int i = 0; i < yyleng; i++) {
         if (yytext[i] == '\n')
             scanlineno++;
     }
 }
-int processChar(){
-    // yytext[0] will be "'", so check yytext[1] for escap
-    if (yytext[1] == '\\'){
-        if (yytext[2] == '\''){
-            yylval.value = '\'';
+
+int processChar() {
+    if (yytext[1] == '\\') {
+        switch (yytext[2]) {
+            case 'n': yylval.value = '\n'; break;
+            case 't': yylval.value = '\t'; break;
+            case '\\': yylval.value = '\\'; break;
+            case '\'': yylval.value = '\''; break;
+            default:
+                yyerrormsg = "Unrecognized escape character";
+                return ERROR;
         }
-        else if (yytext[2] == 'n'){
-            yylval.value = '\n';
-        }
-        else if (yytext[2] == 't'){
-            yylval.value = '\t';
-        }
-        else if (yytext[2] == '\\'){
-            yylval.value = '\\';
-        }
-        else{
-            yyerrormsg = "Unrecognized escape character in String";
-            return ERROR;
-        }
-    }
-    else{
-        // If the character isn't escaped, add it to our temp string.
+    } else {
         yylval.value = yytext[1];
     }
     return CHARCONST;
