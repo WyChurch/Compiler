@@ -74,6 +74,7 @@ program         : declList
                     tree* progNode = maketree(PROGRAM);
                     addChild(progNode, $1);
                     ast = progNode;
+                    $$ = progNode;
                  }
                 ;
 
@@ -365,9 +366,9 @@ var             : ID
                 | ID  LSQ_BRKT addExpr RSQ_BRKT
                 {
                     tree* varNode = maketree(VAR);
-                    addChild(varNode, $3);
-                    tree* idNode = maketreeWithVal(IDENTIFIER,$1);
+                    tree* idNode = maketreeWithVal(IDENTIFIER, $1);
                     addChild(varNode, idNode);
+                    addChild(varNode, $3);  // index expression
                     $$ = varNode;
                  }
                 ;
@@ -528,8 +529,8 @@ funcCallExpr    : ID LPAREN argList RPAREN
                 {
                     tree* funcCallExprNode = maketree(FUNCCALLEXPR);
                     tree* idNode = maketreeWithVal(IDENTIFIER, $1);
+                    tree* emptyArgs = maketree(ARGLIST);
                     addChild(funcCallExprNode, idNode);
-                    tree* emptyArgs = maketree(ARGLIST);  // if you want to represent no args explicitly
                     addChild(funcCallExprNode, emptyArgs);
                     $$ = funcCallExprNode;
                  }
