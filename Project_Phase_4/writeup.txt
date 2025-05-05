@@ -1,0 +1,12 @@
+Section 1.
+    Julie Hargrave, Wyatt Churchman, Samantha Nava for CS4318
+
+Section 2. 
+    Julie - main contributor to parser.y; updated driver.c and intitial code generation
+    Wyatt - general debugging and organizing for whole of code; crutial in big picture issues and testing code
+    Sam - debugging parser.y and driver.c and tried debugging general output
+
+Section 3.
+    We used the provided tests. We also tested the error and warning the parser is supposed to produce by 
+    purposefully changing some of the provided files to include syntax errors and undeclared symbols. We weren't given feedback on
+	Phase 3 so we couldn't quite pinpoint where our issues in the code to see correct output.
