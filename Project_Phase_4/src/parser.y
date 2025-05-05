@@ -493,6 +493,7 @@ factor          : LPAREN expression RPAREN
                  }
                 | STRCONST
                 {
+                    tree* factorNode = maketree(FACTOR);
                     tree* strNode = maketreeWithVal(STRING, $1);
                     addChild(factorNode, strNode);
                     $$ = factorNode;
