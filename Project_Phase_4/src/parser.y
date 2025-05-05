@@ -362,7 +362,7 @@ var             : ID
                     addChild(varNode, idNode);
                     $$ = varNode;
                  }
-                | ID RSQ_BRKT addExpr LSQ_BRKT
+                | ID  LSQ_BRKT addExpr RSQ_BRKT
                 {
                     tree* varNode = maketree(VAR);
                     addChild(varNode, $3);
@@ -493,7 +493,8 @@ factor          : LPAREN expression RPAREN
                  }
                 | STRCONST
                 {
-                    tree* factorNode = maketree(FACTOR);
+                    tree* strNode = maketreeWithVal(STRING, $1);
+                    addChild(factorNode, strNode);
                     $$ = factorNode;
                  }
                 ;
@@ -525,6 +526,10 @@ funcCallExpr    : ID LPAREN argList RPAREN
                 | ID LPAREN RPAREN
                 {
                     tree* funcCallExprNode = maketree(FUNCCALLEXPR);
+                    tree* idNode = maketreeWithVal(IDENTIFIER, $1);
+                    addChild(funcCallExprNode, idNode);
+                    tree* emptyArgs = maketree(ARGLIST);  // if you want to represent no args explicitly
+                    addChild(funcCallExprNode, emptyArgs);
                     $$ = funcCallExprNode;
                  }
                 ;
