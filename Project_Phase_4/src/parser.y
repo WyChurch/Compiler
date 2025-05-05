@@ -101,6 +101,20 @@ funcReturnType : KWD_INT
                }
                ;
 
+decl            : varDecl
+                {
+                    tree* declNode = maketree(DECL);
+                    addChild(declNode, $1);
+                    $$ = declNode;
+                 }
+                | funDecl
+                {
+                    tree* declNode = maketree(DECL);
+                    addChild(declNode, $1);
+                    $$ = declNode;
+                 }
+                ;
+
 declList        : decl
                  {
                     tree* declListNode = maketree(DECLLIST);
@@ -116,19 +130,6 @@ declList        : decl
                  }
                 ;
 
-decl            : varDecl
-                {
-                    tree* declNode = maketree(DECL);
-                    addChild(declNode, $1);
-                    $$ = declNode;
-                 }
-                | funDecl
-                {
-                    tree* declNode = maketree(DECL);
-                    addChild(declNode, $1);
-                    $$ = declNode;
-                 }
-                ;
 varDecl         : varTypeSpecifier ID LSQ_BRKT INTCONST RSQ_BRKT SEMICLN
                 {
                     ST_insert($2,scope,$1->val,ARRAY);
@@ -222,76 +223,7 @@ funDecl         : funcReturnType ID LPAREN RPAREN funBody
                     $$ = funDeclNode;
                 }
                 ;
-funBody         : LCRLY_BRKT localDeclList statementList RCRLY_BRKT
-                {
-                    new_scope();  // Open a new scope for function body
 
-                    tree* funBodyNode = maketree(FUNBODY);
-                    addChild(funBodyNode, $2);
-                    addChild(funBodyNode, $3);
-
-                    up_scope();    // Close the scope at the end
-                    scope = "";    // Reset to global
-                    $$ = funBodyNode;
-                }
-                ;
-localDeclList   : 
-                {
-                    tree* localDeclListNode = maketree(LOCALDECLLIST);
-                    $$ = localDeclListNode;
-                }
-                | varDecl localDeclList
-                {
-                    tree* localDeclListNode = maketree(LOCALDECLLIST);
-                    addChild(localDeclListNode,$1);
-                    addChild(localDeclListNode,$2);
-                    $$ = localDeclListNode;
-                 }
-                ;
-statementList   :
-                {
-                    tree* statementListNode = maketree(STATEMENTLIST);
-                    $$ = statementListNode;
-                 }
-                | statement statementList
-                {
-                    tree* statementListNode = maketree(STATEMENTLIST);
-                    addChild(statementListNode, $1);
-                    addChild(statementListNode, $2);
-                    $$ = statementListNode;
-                 }
-                ;
-statement       : compoundStmt
-                {
-                    tree* statementNode = maketree(STATEMENT);
-                    addChild(statementNode, $1);
-                    $$ = statementNode;
-                 }
-                | assignStmt
-                {
-                    tree* statementNode = maketree(STATEMENT);
-                    addChild(statementNode, $1);
-                    $$ = statementNode;
-                 }
-                | condStmt
-                {
-                    tree* statementNode = maketree(STATEMENT);
-                    addChild(statementNode, $1);
-                    $$ = statementNode;
-                 }
-                | loopStmt
-                {
-                    tree* statementNode = maketree(STATEMENT);
-                    addChild(statementNode, $1);
-                    $$ = statementNode;
-                 }
-                | returnStmt
-                {
-                    tree* statementNode = maketree(STATEMENT);
-                    addChild(statementNode, $1);
-                    $$ = statementNode;
-                 }
-                ;
 compoundStmt    : LCRLY_BRKT statementList RCRLY_BRKT
                 {
                     tree* compStmtNode = maketree(COMPOUNDSTMT);
@@ -311,7 +243,7 @@ assignStmt      : var OPER_ASSN expression SEMICLN
                     tree* assignStmtNode = maketree(ASSIGNSTMT);
                     addChild(assignStmtNode, $1);
                     $$ = assignStmtNode;
-                 }
+                }
                 ;
 condStmt        : KWD_IF LPAREN expression RPAREN statement
                 {
@@ -349,6 +281,80 @@ returnStmt      : KWD_RETURN SEMICLN
                     $$ = returnStmtNode;
                  }
                 ;
+
+statement       : compoundStmt
+                {
+                    tree* statementNode = maketree(STATEMENT);
+                    addChild(statementNode, $1);
+                    $$ = statementNode;
+                 }
+                | assignStmt
+                {
+                    tree* statementNode = maketree(STATEMENT);
+                    addChild(statementNode, $1);
+                    $$ = statementNode;
+                 }
+                | condStmt
+                {
+                    tree* statementNode = maketree(STATEMENT);
+                    addChild(statementNode, $1);
+                    $$ = statementNode;
+                 }
+                | loopStmt
+                {
+                    tree* statementNode = maketree(STATEMENT);
+                    addChild(statementNode, $1);
+                    $$ = statementNode;
+                 }
+                | returnStmt
+                {
+                    tree* statementNode = maketree(STATEMENT);
+                    addChild(statementNode, $1);
+                    $$ = statementNode;
+                 }
+                ;
+
+statementList   : /* empty */
+                {
+                    tree* statementListNode = maketree(STATEMENTLIST);
+                    $$ = statementListNode;
+                 }
+                | statement statementList
+                {
+                    tree* statementListNode = maketree(STATEMENTLIST);
+                    addChild(statementListNode, $1);
+                    addChild(statementListNode, $2);
+                    $$ = statementListNode;
+                 }
+                ;
+
+funBody         : LCRLY_BRKT localDeclList statementList RCRLY_BRKT
+                {
+                    new_scope();  // Open a new scope for function body
+
+                    tree* funBodyNode = maketree(FUNBODY);
+                    addChild(funBodyNode, $2);
+                    addChild(funBodyNode, $3);
+
+                    up_scope();    // Close the scope at the end
+                    scope = "";    // Reset to global
+                    $$ = funBodyNode;
+                }
+                ;
+localDeclList   : /* empty */
+                {
+                    tree* localDeclListNode = maketree(LOCALDECLLIST);
+                    $$ = localDeclListNode;
+                }
+                | varDecl localDeclList
+                {
+                    tree* localDeclListNode = maketree(LOCALDECLLIST);
+                    addChild(localDeclListNode,$1);
+                    addChild(localDeclListNode,$2);
+                    $$ = localDeclListNode;
+                 }
+                ;
+
 var             : ID
                 {
                     tree* varNode = maketree(VAR);
@@ -365,21 +371,23 @@ var             : ID
                     $$ = varNode;
                  }
                 ;
-expression      : addExpr
+
+addExpr         : term
                 {
-                    tree* expressionNode = maketree(EXPRESSION);
-                    addChild(expressionNode, $1);
-                    $$ = expressionNode;
+                    tree* addExprNode = maketree(ADDEXPR);
+                    addChild(addExprNode, $1);
+                    $$ = addExprNode;
                  }
-                | expression relop addExpr
+                | addExpr addop term
                 {
-                    tree* expressionNode = maketree(EXPRESSION);
-                    addChild(expressionNode, $1);
-                    addChild(expressionNode, $2);
-                    addChild(expressionNode, $3);
-                    $$ = expressionNode;
+                    tree* addExprNode = maketree(ADDEXPR);
+                    addChild(addExprNode, $1);
+                    addChild(addExprNode, $2);
+                    addChild(addExprNode, $3);
+                    $$ = addExprNode;
                  }
                 ;
+
 relop           : OPER_LTE
                 {
                     tree* relopNode = maketreeWithIntVal(RELOP, LTE);
@@ -411,21 +419,23 @@ relop           : OPER_LTE
                     $$ = relopNode;
                  }
                 ;
-addExpr         : term
+
+expression      : addExpr
                 {
-                    tree* addExprNode = maketree(ADDEXPR);
-                    addChild(addExprNode, $1);
-                    $$ = addExprNode;
+                    tree* expressionNode = maketree(EXPRESSION);
+                    addChild(expressionNode, $1);
+                    $$ = expressionNode;
                  }
-                | addExpr addop term
+                | expression relop addExpr
                 {
-                    tree* addExprNode = maketree(ADDEXPR);
-                    addChild(addExprNode, $1);
-                    addChild(addExprNode, $2);
-                    addChild(addExprNode, $3);
-                    $$ = addExprNode;
+                    tree* expressionNode = maketree(EXPRESSION);
+                    addChild(expressionNode, $1);
+                    addChild(expressionNode, $2);
+                    addChild(expressionNode, $3);
+                    $$ = expressionNode;
                  }
                 ;
+
 addop           : OPER_ADD
                 {
                     tree* addopNode = maketreeWithIntVal(ADDOP,ADD);
@@ -437,21 +447,7 @@ addop           : OPER_ADD
                     $$ = addopNode;
                  }
                 ;
-term            : factor
-                {
-                    tree* termNode = maketree(TERM);
-                    addChild(termNode, $1);
-                    $$ = termNode;
-                 }
-                | term mulop factor
-                {
-                    tree* termNode = maketree(TERM);
-                    addChild(termNode, $1);
-                    addChild(termNode, $2);
-                    addChild(termNode, $3);
-                    $$ = termNode;
-                 }
-                ;
+
 mulop           : OPER_MUL
                 {
                     tree* mulopNode = maketreeWithIntVal(MULOP,MUL);
@@ -501,6 +497,23 @@ factor          : LPAREN expression RPAREN
                     $$ = factorNode;
                  }
                 ;
+
+term            : factor
+                {
+                    tree* termNode = maketree(TERM);
+                    addChild(termNode, $1);
+                    $$ = termNode;
+                 }
+                | term mulop factor
+                {
+                    tree* termNode = maketree(TERM);
+                    addChild(termNode, $1);
+                    addChild(termNode, $2);
+                    addChild(termNode, $3);
+                    $$ = termNode;
+                 }
+                ;
+
 funcCallExpr    : ID LPAREN argList RPAREN
                 {
                     tree* funcCallExprNode = maketree(FUNCCALLEXPR);
